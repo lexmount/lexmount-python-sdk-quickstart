@@ -1,5 +1,5 @@
 # Lexmount SDK (从腾讯云 COS 安装)
-https://pip-1377899528.cos.ap-nanjing.myqcloud.com/packages/lexmount-0.1.0-20251106140710-87249db.tar.gz
+https://pip-1377899528.cos.ap-nanjing.myqcloud.com/packages/lexmount-0.1.0-20251106143839-45d76ad.tar.gz
 
 # Browser automation
 playwright>=1.40.0
