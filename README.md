@@ -18,7 +18,6 @@ pip install -r requirements.txt
 cat > .env << EOF
 LEXMOUNT_API_KEY=your-api-key-here
 LEXMOUNT_PROJECT_ID=your-project-id-here
-LEXMOUNT_BASE_URL=https://api.lexmount.net
 EOF
 
 # 4. 运行示例
