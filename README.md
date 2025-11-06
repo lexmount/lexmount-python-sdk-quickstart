@@ -1,38 +1,40 @@
 # lexmount-python-sdk-quickstart
 
-快速开始使用 Lexmount Python SDK 的示例项目。
+> 🇨🇳 [中文版](./README.zh.md)
+
+Quick start examples for Lexmount Python SDK.
 
 ---
 
-## 📋 示例说明
+## 📋 Examples
 
-### demo.py - 基础演示
-- 访问 Lexmount 官网
-- 验证页面标题
-- 截图保存
+### demo.py - Basic Demo
+- Visit Lexmount website
+- Verify page title
+- Take screenshot
 
-### light-demo.py - 轻量浏览器演示
-- 使用 `chrome-light-docker` 模式
-- 访问新浪新闻
-- 提取所有链接并保存到 `links.txt`
+### light-demo.py - Light Browser Demo
+- Use `chrome-light-docker` mode
+- Visit Sina News
+- Extract all links and save to `links.txt`
 
 ---
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
 ```bash
-# 1. 创建并激活虚拟环境
+# 1. Create and activate virtual environment
 python3 -m venv venv
-source venv/bin/activate  # Linux/macOS 或 venv\Scripts\activate (Windows)
+source venv/bin/activate  # Linux/macOS or venv\Scripts\activate (Windows)
 
-# 2. 安装依赖
+# 2. Install dependencies
 pip install -r requirements.txt
 
-# 3. 创建 .env 文件
+# 3. Create .env file
 cp .env.example .env
-# 编辑 .env 填入实际的 API Key 和 Project ID
+# Edit .env and fill in your actual API Key and Project ID
 
-# 4. 运行示例
-python demo.py              # 基础演示
-python light-demo.py        # 轻量浏览器演示
+# 4. Run examples
+python demo.py              # Basic demo
+python light-demo.py        # Light browser demo
 ```
