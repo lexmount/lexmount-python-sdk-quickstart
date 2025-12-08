@@ -21,7 +21,7 @@ def run(playwright: Playwright) -> None:
     page = context.pages[0]
 
     # Execute Playwright actions on the remote browser tab
-    page.goto("https://dev.lexmount.net/")
+    page.goto("https://dev.lexmount.com/")
     page_title = page.title()
     assert page_title == "Lexmount Browser - AI-Powered Cloud Browser Service", f"Page title is not 'Lexmount Browser - AI-Powered Cloud Browser Service', it is '{page_title}'"
     page.screenshot(path="screenshot.png")
