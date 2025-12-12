@@ -14,7 +14,7 @@ def run(playwright: Playwright) -> None:
     lm = Lexmount()  # Reads credentials from environment variables
     
     # Create a session with chrome-light-docker
-    session = lm.sessions.create(browser_mode="chrome-light-docker")
+    session = lm.sessions.create(browser_mode="light")
     
     # Connect to the remote session
     chromium = playwright.chromium

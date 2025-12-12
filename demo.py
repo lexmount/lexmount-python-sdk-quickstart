@@ -12,7 +12,7 @@ def run(playwright: Playwright) -> None:
     lm = Lexmount()  # Reads credentials from environment variables
     
     # Create a session on Lexmount
-    session = lm.sessions.create()
+    session = lm.sessions.create(browser_mode="normal")
 
     # Connect to the remote session
     chromium = playwright.chromium
