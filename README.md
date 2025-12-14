@@ -35,6 +35,6 @@ cp .env.example .env
 # Edit .env and fill in your actual API Key and Project ID
 
 # 4. Run examples
-python demo.py              # Basic demo
-python light-demo.py        # Light browser demo
+python3 demo.py              # Basic demo
+python3 light-demo.py        # Light browser demo
 ```

@@ -35,6 +35,6 @@ cp .env.example .env
 # 编辑 .env 填入实际的 API Key 和 Project ID
 
 # 4. 运行示例
-python demo.py              # 基础演示
-python light-demo.py        # 轻量浏览器演示
+python3 demo.py              # 基础演示
+python3 light-demo.py        # 轻量浏览器演示
 ```
