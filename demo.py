@@ -12,22 +12,22 @@ def run(playwright: Playwright) -> None:
     lm = Lexmount()  # Reads credentials from environment variables
     
     # Create a session on Lexmount
-    session = lm.sessions.create(browser_mode="normal")
+    with lm.sessions.create() as session:
 
-    # Connect to the remote session
-    chromium = playwright.chromium
-    browser = chromium.connect_over_cdp(session.connect_url)
-    context = browser.contexts[0]
-    page = context.pages[0]
+        # Connect to the remote session
+        chromium = playwright.chromium
+        browser = chromium.connect_over_cdp(session.connect_url)
+        context = browser.contexts[0]
+        page = context.pages[0]
 
-    # Execute Playwright actions on the remote browser tab
-    page.goto("https://dev.lexmount.com/")
-    page_title = page.title()
-    assert page_title == "Lexmount Browser - AI-Powered Cloud Browser Service", f"Page title is not 'Lexmount Browser - AI-Powered Cloud Browser Service', it is '{page_title}'"
-    page.screenshot(path="screenshot.png")
+        # Execute Playwright actions on the remote browser tab
+        page.goto("https://dev.lexmount.com/")
+        page_title = page.title()
+        assert page_title == "Lexmount Browser - AI-Powered Cloud Browser Service", f"Page title is not 'Lexmount Browser - AI-Powered Cloud Browser Service', it is '{page_title}'"
+        page.screenshot(path="screenshot.png")
 
-    page.close()
-    browser.close()
+        page.close()
+        browser.close()
 
 
 if __name__ == "__main__":
