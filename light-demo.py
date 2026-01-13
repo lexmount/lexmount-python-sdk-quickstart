@@ -14,31 +14,31 @@ def run(playwright: Playwright) -> None:
     lm = Lexmount()  # Reads credentials from environment variables
     
     # Create a session with chrome-light-docker
-    session = lm.sessions.create(browser_mode="light")
+    with lm.sessions.create(browser_mode="light") as session:
     
-    # Connect to the remote session
-    chromium = playwright.chromium
-    browser = chromium.connect_over_cdp(session.connect_url)
-    context = browser.contexts[0]
-    page = context.pages[0]
-    
-    # Execute Playwright actions on the remote browser tab
-    page.goto("https://news.sina.cn/")
-    
-    # Extract all links
-    links = page.evaluate('''() => {
-        return Array.from(document.querySelectorAll('a[href]')).map(a => a.href);
-    }''')
-    
-    # Save to file
-    with open("links.txt", "w", encoding="utf-8") as f:
-        for link in links:
-            f.write(link + "\n")
-    
-    print(f"✅ 已提取 {len(links)} 个链接，保存到: links.txt")
-    
-    page.close()
-    browser.close()
+        # Connect to the remote session
+        chromium = playwright.chromium
+        browser = chromium.connect_over_cdp(session.connect_url)
+        context = browser.contexts[0]
+        page = context.pages[0]
+        
+        # Execute Playwright actions on the remote browser tab
+        page.goto("https://news.sina.cn/")
+        
+        # Extract all links
+        links = page.evaluate('''() => {
+            return Array.from(document.querySelectorAll('a[href]')).map(a => a.href);
+        }''')
+        
+        # Save to file
+        with open("links.txt", "w", encoding="utf-8") as f:
+            for link in links:
+                f.write(link + "\n")
+        
+        print(f"✅ 已提取 {len(links)} 个链接，保存到: links.txt")
+        
+        page.close()
+        browser.close()
 
 
 if __name__ == "__main__":
