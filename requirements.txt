@@ -1,4 +1,4 @@
-# Lexmount SDK (从腾讯云 COS 安装)
+# Lexmount SDK
 lexmount>=0.3.1
 
 # Browser automation
