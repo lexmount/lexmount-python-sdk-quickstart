@@ -36,5 +36,5 @@ cp .env.example .env
 
 # 4. Run examples
 python3 demo.py              # Basic demo
-python3 light-demo.py        # Light browser demo
+python3 light_demo.py        # Light browser demo
 ```
