@@ -33,9 +33,7 @@ def main():
         else:
             context = client.contexts.create(
                 metadata={
-                    "user": "demo_user",
-                    "environment": "development",
-                    "created_by": "example_script"
+                    # add your metadata here
                 }
             )
             context_id = context.id
