@@ -4,12 +4,10 @@ Basic context operations example.
 This example demonstrates:
 - Creating a session with context (read_write mode)
 """
-from lexmount import Lexmount, ContextNotFoundError, set_log_level
+from lexmount import Lexmount, set_log_level
 from dotenv import load_dotenv
-from pathlib import Path
 import argparse
-import sys
-from playwright.sync_api import Playwright, sync_playwright
+from playwright.sync_api import sync_playwright
 
 load_dotenv(override=True)
 
@@ -35,9 +33,7 @@ def main():
         else:
             context = client.contexts.create(
                 metadata={
-                    "user": "demo_user",
-                    "environment": "development",
-                    "created_by": "example_script"
+                    # add your metadata here
                 }
             )
             context_id = context.id
