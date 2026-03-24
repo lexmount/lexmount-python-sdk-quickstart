@@ -18,6 +18,11 @@ Quick start examples for Lexmount Python SDK.
 - Visit Sina News
 - Extract all links and save to `links.txt`
 
+### extension_basic.py - Extension Demo
+- Upload `test_extension.zip`
+- List uploaded extensions
+- Create a browser session with `extension_ids`
+
 ---
 
 ## 🚀 Quick Start
@@ -33,8 +38,11 @@ pip install -r requirements.txt
 # 3. Create .env file
 cp .env.example .env
 # Edit .env and fill in your actual API Key and Project ID
+# For office test environment:
+# LEXMOUNT_BASE_URL=https://apitest.local.lexmount.net
 
 # 4. Run examples
 python3 demo.py              # Basic demo
 python3 light_demo.py        # Light browser demo
+python3 extension_basic.py   # Extension demo
 ```
