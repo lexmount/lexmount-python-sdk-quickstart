@@ -23,6 +23,10 @@ Quick start examples for Lexmount Python SDK.
 - List uploaded extensions
 - Create a browser session with `extension_ids`
 
+### proxy_demo.py - Proxy Demo
+- Create a browser session with `proxy`
+- Verify the remote browser can use authenticated upstream proxy
+
 ---
 
 ## 🚀 Quick Start
@@ -45,4 +49,5 @@ cp .env.example .env
 python3 demo.py              # Basic demo
 python3 light_demo.py        # Light browser demo
 python3 extension_basic.py   # Extension demo
+python3 proxy_demo.py        # Proxy demo
 ```
