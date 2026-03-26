@@ -39,6 +39,7 @@ def run(playwright: Playwright) -> None:
         print(f"Page title: {page.title()}")
         page.screenshot(path="proxy_demo.png")
         print("Saved screenshot to proxy_demo.png")
+        input("\n   Press Enter to continue...")
 
         page.close()
         browser.close()
