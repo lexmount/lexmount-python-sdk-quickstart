@@ -27,6 +27,11 @@ Quick start examples for Lexmount Python SDK.
 - Create a browser session with `proxy`
 - Verify the remote browser can use authenticated upstream proxy
 
+### session_downloads.py - Session Downloads Demo
+- Trigger a file download in the remote browser
+- Query the session downloads list via SDK
+- Fetch the session downloads zip via SDK
+
 ---
 
 ## 🚀 Quick Start
@@ -50,4 +55,5 @@ python3 demo.py              # Basic demo
 python3 light_demo.py        # Light browser demo
 python3 extension_basic.py   # Extension demo
 python3 proxy_demo.py        # Proxy demo
+python3 session_downloads.py # Session downloads demo
 ```
