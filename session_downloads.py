@@ -12,14 +12,19 @@ def run(playwright: Playwright) -> None:
 
     with client.sessions.create() as session:
         browser = playwright.chromium.connect_over_cdp(session.connect_url)
+        cdp = browser.new_browser_cdp_session()
+        cdp.send("Browser.setDownloadBehavior", {
+            "behavior": "allow",
+            "downloadPath": "/config/Downloads",
+            "eventsEnabled": True,
+        })
         context = browser.contexts[0]
         page = context.pages[0]
 
         page.goto("https://file-examples.com/index.php/sample-documents-download/")
         with page.expect_download() as download_info:
             page.get_by_role("link", name="Download sample DOC file").click()
-        download = download_info.value
-        download.save_as("local-sample-download.doc")
+        download_info.value
 
         downloads = client.sessions.downloads.list(session.id)
         print(f"download count: {downloads.summary['count']}")

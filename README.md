@@ -28,6 +28,7 @@ Quick start examples for Lexmount Python SDK.
 - Verify the remote browser can use authenticated upstream proxy
 
 ### session_downloads.py - Session Downloads Demo
+- Explicitly configure `Browser.setDownloadBehavior` to `/config/Downloads`
 - Trigger a file download in the remote browser
 - Query the session downloads list via SDK
 - Fetch the session downloads zip via SDK
