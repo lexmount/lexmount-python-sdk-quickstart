@@ -23,6 +23,10 @@
 - 查看已上传插件列表
 - 使用 `extension_ids` 创建浏览器会话
 
+### proxy_demo.py - 代理演示
+- 使用 `proxy` 参数创建浏览器会话
+- 验证远端浏览器通过带认证的上游代理访问外网
+
 ---
 
 ## 🚀 快速开始
@@ -45,4 +49,5 @@ cp .env.example .env
 python3 demo.py              # 基础演示
 python3 light_demo.py        # 轻量浏览器演示
 python3 extension_basic.py   # 插件演示
+python3 proxy_demo.py        # 代理演示
 ```
