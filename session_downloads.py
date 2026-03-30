@@ -33,12 +33,6 @@ def run(playwright: Playwright) -> None:
     with client.sessions.create() as session:
         print(f"session_id: {session.id}")
         browser = playwright.chromium.connect_over_cdp(session.connect_url)
-        cdp = browser.new_browser_cdp_session()
-        cdp.send("Browser.setDownloadBehavior", {
-            "behavior": "allow",
-            "downloadPath": "/config/Downloads",
-            "eventsEnabled": True,
-        })
         context = browser.contexts[0]
         page = context.pages[0]
 
