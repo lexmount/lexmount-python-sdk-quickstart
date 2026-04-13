@@ -27,6 +27,11 @@
 - 使用 `proxy` 参数创建浏览器会话
 - 验证远端浏览器通过带认证的上游代理访问外网
 
+### inspect_url_demo.py - Inspect URL 演示
+- 创建浏览器会话
+- 打印 `inspect_url` 供用户手动打开检查
+- 等待用户输入后再关闭会话
+
 ---
 
 ## 🚀 快速开始
@@ -50,4 +55,5 @@ python3 demo.py              # 基础演示
 python3 light_demo.py        # 轻量浏览器演示
 python3 extension_basic.py   # 插件演示
 python3 proxy_demo.py        # 代理演示
+python3 inspect_url_demo.py  # Inspect URL 演示
 ```
