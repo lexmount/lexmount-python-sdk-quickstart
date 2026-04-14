@@ -32,6 +32,11 @@
 - 打印 `inspect_url` 供用户手动打开检查
 - 等待用户输入后再关闭会话
 
+### connection_demo.py - 直连 websocket 演示
+- 根据 `LEXMOUNT_BASE_URL` 组装直连 websocket 地址
+- 通过 `/connection?project_id=...&api_key=...` 连接
+- 访问 `https://example.com` 并保存 `connection_demo.png`
+
 ---
 
 ## 🚀 快速开始
@@ -56,4 +61,5 @@ python3 light_demo.py        # 轻量浏览器演示
 python3 extension_basic.py   # 插件演示
 python3 proxy_demo.py        # 代理演示
 python3 inspect_url_demo.py  # Inspect URL 演示
+python3 connection_demo.py   # 直连 websocket 演示
 ```

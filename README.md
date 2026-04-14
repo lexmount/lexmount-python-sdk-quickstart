@@ -32,6 +32,11 @@ Quick start examples for Lexmount Python SDK.
 - Print the `inspect_url` for manual inspection
 - Wait for user input before closing the session
 
+### connection_demo.py - Direct Connection Demo
+- Build a direct websocket URL from `LEXMOUNT_BASE_URL`
+- Connect through `/connection?project_id=...&api_key=...`
+- Visit `https://example.com` and save `connection_demo.png`
+
 ### session_downloads.py - Session Downloads Demo
 - Explicitly configure `Browser.setDownloadBehavior` to `/config/Downloads`
 - Trigger a file download in the remote browser
@@ -62,5 +67,6 @@ python3 light_demo.py        # Light browser demo
 python3 extension_basic.py   # Extension demo
 python3 proxy_demo.py        # Proxy demo
 python3 inspect_url_demo.py  # Inspect URL demo
+python3 connection_demo.py   # Direct connection demo
 python3 session_downloads.py # Session downloads demo
 ```
