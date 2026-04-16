@@ -33,10 +33,9 @@ Quick start examples for Lexmount Python SDK.
 - Wait for user input before closing the session
 
 ### context_fork.py - Context Fork Demo
-- Create a source context
+- Accept an existing source `context_id`
 - Fork it into a new context
-- Query the forked context details
-- Clean up both source and forked contexts
+- Print the forked context id
 
 ### connection_demo.py - Direct Connection Demo
 - Build a direct websocket URL from `LEXMOUNT_BASE_URL`
@@ -70,7 +69,7 @@ cp .env.example .env
 # 4. Run examples
 python3 demo.py              # Basic demo
 python3 light_demo.py        # Light browser demo
-python3 context_fork.py      # Context fork demo
+python3 context_fork.py <context_id>  # Context fork demo
 python3 extension_basic.py   # Extension demo
 python3 proxy_demo.py        # Proxy demo
 python3 inspect_url_demo.py  # Inspect URL demo

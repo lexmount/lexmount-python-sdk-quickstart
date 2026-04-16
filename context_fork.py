@@ -2,11 +2,11 @@
 Context fork quickstart example.
 
 This example demonstrates:
-- Creating a source context
+- Accepting an existing source context id
 - Forking it into a new context
-- Querying the forked context details
-- Cleaning up both source and forked contexts
+- Printing the forked context id
 """
+import argparse
 from dotenv import load_dotenv
 
 load_dotenv(override=True)
@@ -17,29 +17,19 @@ client = Lexmount()
 
 
 def main():
-    source = None
-    forked = None
+    parser = argparse.ArgumentParser(description="Fork an existing context and print the new context id")
+    parser.add_argument("context_id", help="Existing source context id")
+    args = parser.parse_args()
 
     try:
-        source = client.contexts.create(metadata={"scenario": "quickstart-context-fork"})
-        print(f"Source context created: {source.id}")
-
-        forked = client.contexts.fork(source.id)
-        print(f"Forked context created: {forked.id}")
-
-        details = client.contexts.get(forked.id)
-        print(f"Forked context status: {details.status}")
+        forked = client.contexts.fork(args.context_id)
+        print(f"Forked context id: {forked.id}")
     except ContextLockedError as error:
         print(f"Source context is locked: {error}")
         raise
     except ContextNotFoundError as error:
         print(f"Source context not found: {error}")
         raise
-    finally:
-        if forked is not None:
-            client.contexts.delete(forked.id)
-        if source is not None:
-            client.contexts.delete(source.id)
 
 
 if __name__ == "__main__":
