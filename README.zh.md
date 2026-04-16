@@ -32,6 +32,12 @@
 - 打印 `inspect_url` 供用户手动打开检查
 - 等待用户输入后再关闭会话
 
+### context_fork.py - Context Fork 演示
+- 创建 source context
+- 基于 source fork 出新的 context
+- 查询 fork 后 context 的详情
+- 清理 source 和 forked context
+
 ### connection_demo.py - 直连 websocket 演示
 - 根据 `LEXMOUNT_BASE_URL` 组装直连 websocket 地址
 - 通过 `/connection?project_id=...&api_key=...` 连接
@@ -58,6 +64,7 @@ cp .env.example .env
 # 4. 运行示例
 python3 demo.py              # 基础演示
 python3 light_demo.py        # 轻量浏览器演示
+python3 context_fork.py      # Context Fork 演示
 python3 extension_basic.py   # 插件演示
 python3 proxy_demo.py        # 代理演示
 python3 inspect_url_demo.py  # Inspect URL 演示
