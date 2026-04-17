@@ -32,6 +32,11 @@
 - 打印 `inspect_url` 供用户手动打开检查
 - 等待用户输入后再关闭会话
 
+### session_targets.py - Session Targets 演示
+- 创建浏览器会话
+- 通过 SDK 查询 `/json` target 列表
+- 打印每个 target 的 `inspectUrl`、页面 URL 和 websocket URL
+
 ### context_fork.py - Context Fork 演示
 - 传入一个已有的 source `context_id`
 - 基于 source fork 出新的 context
@@ -67,5 +72,6 @@ python3 context_fork.py <context_id>  # Context Fork 演示
 python3 extension_basic.py   # 插件演示
 python3 proxy_demo.py        # 代理演示
 python3 inspect_url_demo.py  # Inspect URL 演示
+python3 session_targets.py   # Session targets 演示
 python3 connection_demo.py   # 直连 websocket 演示
 ```
