@@ -37,6 +37,11 @@ Quick start examples for Lexmount Python SDK.
 - Query `/json` targets through the SDK
 - Print each target's `inspectUrl`, page URL, and websocket URL
 
+### catalog_info.py - Catalog Info Demo
+- Uses `lexmount==0.5.0`
+- Query the public endpoint catalog through `client.catalog_info()`
+- Print available regions, host, and endpoint IPs
+
 ### context_fork.py - Context Fork Demo
 - Accept an existing source `context_id`
 - Fork it into a new context
@@ -84,6 +89,7 @@ python3 extension_basic.py   # Extension demo
 python3 proxy_demo.py        # Proxy demo
 python3 inspect_url_demo.py  # Inspect URL demo
 python3 session_targets.py   # Session targets demo
+python3 catalog_info.py      # Public endpoint catalog demo
 python3 connection_demo.py   # Direct connection demo
 python3 new_page_repro.py --browser-mode normal  # Reproduce new_page issue
 python3 session_downloads.py # Session downloads demo

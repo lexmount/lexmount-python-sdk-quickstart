@@ -37,6 +37,11 @@
 - 通过 SDK 查询 `/json` target 列表
 - 打印每个 target 的 `inspectUrl`、页面 URL 和 websocket URL
 
+### catalog_info.py - Catalog Info 演示
+- 使用 `lexmount==0.5.0`
+- 通过 `client.catalog_info()` 查询 public endpoint catalog
+- 打印可用 region、host 和 endpoint IP
+
 ### context_fork.py - Context Fork 演示
 - 传入一个已有的 source `context_id`
 - 基于 source fork 出新的 context
@@ -73,5 +78,6 @@ python3 extension_basic.py   # 插件演示
 python3 proxy_demo.py        # 代理演示
 python3 inspect_url_demo.py  # Inspect URL 演示
 python3 session_targets.py   # Session targets 演示
+python3 catalog_info.py      # Public endpoint catalog 演示
 python3 connection_demo.py   # 直连 websocket 演示
 ```
