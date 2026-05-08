@@ -38,7 +38,7 @@ Quick start examples for Lexmount Python SDK.
 - Print each target's `inspectUrl`, page URL, and websocket URL
 
 ### catalog_info.py - Catalog Info Demo
-- Uses `lexmount==0.5.0`
+- Uses `lexmount==0.5.1`
 - Query the public endpoint catalog through `client.catalog_info()`
 - Print available regions, host, and endpoint IPs
 

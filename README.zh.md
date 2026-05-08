@@ -38,7 +38,7 @@
 - 打印每个 target 的 `inspectUrl`、页面 URL 和 websocket URL
 
 ### catalog_info.py - Catalog Info 演示
-- 使用 `lexmount==0.5.0`
+- 使用 `lexmount==0.5.1`
 - 通过 `client.catalog_info()` 查询 public endpoint catalog
 - 打印可用 region、host 和 endpoint IP
 
