@@ -1,83 +1,122 @@
 """
-Example: List and manage browser sessions
+Example: List browser sessions across catalog regions.
 
 This example demonstrates how to:
-1. List all active sessions
-2. Display session information
-3. Clean up sessions
+1. Load Lexmount credentials from .env
+2. Read the public endpoint catalog
+3. List active sessions from each catalog region and print their region
 """
 import os
-from pathlib import Path
+from urllib.parse import urlparse
+
 from dotenv import load_dotenv
 from lexmount import Lexmount
 
-# Load environment variables
-env_path = Path(__file__).parent.parent / ".env"
-load_dotenv(env_path)
+load_dotenv(override=True)
 
-# Initialize client
-client = Lexmount(
-    api_key=os.getenv("LEXMOUNT_API_KEY"),
-    project_id=os.getenv("LEXMOUNT_PROJECT_ID")
-)
+API_KEY = os.getenv("LEXMOUNT_API_KEY")
+PROJECT_ID = os.getenv("LEXMOUNT_PROJECT_ID")
+BASE_URL = os.getenv("LEXMOUNT_BASE_URL")
+
+
+def create_client(region=None):
+    return Lexmount(
+        api_key=API_KEY,
+        project_id=PROJECT_ID,
+        base_url=BASE_URL,
+        region=region,
+    )
+
+
+def catalog_regions(client):
+    catalog = client.catalog_info()
+    if not catalog.get("available"):
+        return []
+
+    return [
+        region
+        for region in catalog.get("regions", [])
+        if region.get("region_id") and region.get("host")
+    ]
+
+
+def host_from_url(value):
+    if not value:
+        return None
+    parsed = urlparse(value)
+    return parsed.hostname
+
+
+def session_region(session, fallback_region_id, region_by_host):
+    for attr in ("region_id", "region"):
+        value = getattr(session, attr, None)
+        if value:
+            return value
+
+    for value in (getattr(session, "ws", None), getattr(session, "inspect_url", None)):
+        host = host_from_url(value)
+        if host and host in region_by_host:
+            return region_by_host[host]
+
+    return fallback_region_id
+
+
+def print_session(index, session, region_id, region_by_host):
+    print(f"Session {index}:")
+    print(f"  ID: {session.id}")
+    print(f"  Region: {session_region(session, region_id, region_by_host)}")
+    print(f"  Status: {session.status}")
+    print(f"  Browser Type: {session.browser_type}")
+    print(f"  Created At: {session.created_at}")
+    print(f"  Container ID: {session.container_id or 'N/A'}")
+    print(f"  WebSocket URL: {session.ws or 'N/A'}")
+    print(f"  Inspect URL: {session.inspect_url or 'N/A'}")
+    print()
+
 
 def main():
-    print("=== Lexmount Session List Example ===\n")
+    print("=== Lexmount Session Region List ===\n")
 
-    # Create a few test sessions
-    print("1. Creating test sessions...")
-    session1 = client.sessions.create(browser_mode="normal")
-    print(f"   Created session 1: {session1.session_id}")
+    catalog_client = create_client()
+    regions = catalog_regions(catalog_client)
+    if not regions:
+        regions = [{"region_id": catalog_client.region_info().get("selected_region") or "default"}]
 
-    session2 = client.sessions.create(browser_mode="normal")
-    print(f"   Created session 2: {session2.session_id}")
+    region_by_host = {
+        region["host"]: region["region_id"]
+        for region in regions
+        if region.get("host") and region.get("region_id")
+    }
 
-    # List all sessions
-    print("\n2. Listing all sessions...")
-    result = client.sessions.list()
-    print(f"   Found {len(result)} sessions on current page")
-    print(f"   Pagination: total={result.pagination.total_count}, active={result.pagination.active_count}, closed={result.pagination.closed_count}")
-
-    # List only active sessions (server-side filtering)
-    print("\n3. Listing only active sessions...")
-    active_result = client.sessions.list(status="active")
-    print(f"   Found {len(active_result)} active sessions:\n")
-
-    for i, session in enumerate(active_result.sessions, 1):
-        print(f"   Session {i}:")
-        print(f"     ID: {session.id}")
-        print(f"     Status: {session.status}")
-        print(f"     Browser Type: {session.browser_type}")
-        print(f"     Created At: {session.created_at}")
-        print(f"     Container ID: {session.container_id}")
-        print(f"     WebSocket URL: {session.ws or 'N/A'}")
-        print(f"     Inspect URL: {session.inspect_url}")
-        if session.inspect_url_dbg:
-            print(f"     Debug URL: {session.inspect_url_dbg}")
+    if region_by_host:
+        print("Catalog regions:")
+        for region in regions:
+            print(f"  {region['region_id']}: {region.get('host', 'N/A')}")
         print()
 
-    # Clean up sessions
-    print("4. Cleaning up sessions...")
-    for session in result.sessions:
-        try:
-            client.sessions.delete(session_id=session.id)
-            print(f"   Deleted session: {session.id}")
-        except Exception as e:
-            print(f"   Failed to delete session {session.id}: {e}")
+    total_active = 0
+    session_index = 1
+    for region in regions:
+        region_id = region["region_id"]
+        client = create_client(region=region_id if region_id != "default" else None)
+        result = client.sessions.list(status="active")
+        total_active += len(result)
 
-    # Verify cleanup
-    print("\n5. Verifying cleanup...")
-    remaining_result = client.sessions.list()
-    print(f"   Remaining sessions: {len(remaining_result)}")
-    print(f"   Pagination: total={remaining_result.pagination.total_count}, active={remaining_result.pagination.active_count}")
+        print(f"Region {region_id}: {len(result)} active sessions")
+        print(
+            "  Pagination: "
+            f"total={result.pagination.total_count}, "
+            f"active={result.pagination.active_count}, "
+            f"closed={result.pagination.closed_count}\n"
+        )
 
-    print("\n=== Example Complete ===")
-    print("\nUsage tips:")
-    print("  - Use list() to get all sessions with pagination info")
-    print("  - Use list(status='active') for server-side filtering")
-    print("  - Access sessions via result.sessions")
-    print("  - Access pagination via result.pagination")
-    print("  - Status values: 'active', 'closed', etc.")
+        for session in result.sessions:
+            print_session(session_index, session, region_id, region_by_host)
+            session_index += 1
+
+    print(f"Total active sessions across listed regions: {total_active}")
+    print("=== Example Complete ===")
+
 
 if __name__ == "__main__":
     main()

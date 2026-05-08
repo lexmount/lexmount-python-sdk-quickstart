@@ -1,29 +1,33 @@
-from dotenv import load_dotenv
+import argparse
 
+from dotenv import load_dotenv
 from lexmount import Lexmount
 from playwright.sync_api import Playwright, sync_playwright
 
-# Load environment variables first
 load_dotenv(override=True)
 
 
-def run(playwright: Playwright) -> None:
-    # Initialize Lexmount client
-    lm = Lexmount()  # Reads credentials from environment variables
-    
-    # Create a session on Lexmount
-    with lm.sessions.create() as session:
+def build_client(region: str | None) -> Lexmount:
+    if region:
+        return Lexmount(region=region)
+    return Lexmount()
 
-        # Connect to the remote session
+
+def run(playwright: Playwright, region: str | None = None) -> None:
+    lm = build_client(region)
+
+    with lm.sessions.create() as session:
         chromium = playwright.chromium
         browser = chromium.connect_over_cdp(session.connect_url)
         context = browser.contexts[0]
         page = context.pages[0]
 
-        # Execute Playwright actions on the remote browser tab
         page.goto("https://browser.lexmount.cn/")
         page_title = page.title()
-        assert page_title == "Lexmount Browser - AI-Powered Cloud Browser Service", f"Page title is not 'Lexmount Browser - AI-Powered Cloud Browser Service', it is '{page_title}'"
+        assert page_title == "Lexmount Browser - AI-Powered Cloud Browser Service", (
+            "Page title is not 'Lexmount Browser - AI-Powered Cloud Browser Service', "
+            f"it is '{page_title}'"
+        )
         page.screenshot(path="screenshot.png")
         input("Press Enter to continue....")
 
@@ -31,7 +35,17 @@ def run(playwright: Playwright) -> None:
         browser.close()
 
 
-if __name__ == "__main__":
-    with sync_playwright() as playwright:
-        run(playwright)
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Run the Lexmount Playwright quickstart demo.")
+    parser.add_argument(
+        "--region",
+        default=None,
+        help="Optional catalog region id, for example office-beijing. Omit to use the default region.",
+    )
+    return parser.parse_args()
 
+
+if __name__ == "__main__":
+    args = parse_args()
+    with sync_playwright() as playwright:
+        run(playwright, region=args.region)
