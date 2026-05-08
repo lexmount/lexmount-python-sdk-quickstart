@@ -52,11 +52,6 @@ Quick start examples for Lexmount Python SDK.
 - Connect through `/connection?project_id=...&api_key=...`
 - Visit `https://example.com` and save `connection_demo.png`
 
-### new_page_repro.py - new_page Repro Demo
-- Create a session in `normal` or `light` mode
-- Connect over CDP with Playwright
-- Attempt `context.new_page()` multiple times and print the result
-
 ### session_downloads.py - Session Downloads Demo
 - Explicitly configure `Browser.setDownloadBehavior` to `/config/Downloads`
 - Trigger a file download in the remote browser
@@ -91,6 +86,5 @@ python3 inspect_url_demo.py  # Inspect URL demo
 python3 session_targets.py   # Session targets demo
 python3 catalog_info.py      # Public endpoint catalog demo
 python3 connection_demo.py   # Direct connection demo
-python3 new_page_repro.py --browser-mode normal  # Reproduce new_page issue
 python3 session_downloads.py # Session downloads demo
 ```
