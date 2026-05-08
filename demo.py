@@ -25,7 +25,7 @@ def run(playwright: Playwright) -> None:
         page_title = page.title()
         assert page_title == "Lexmount Browser - AI-Powered Cloud Browser Service", f"Page title is not 'Lexmount Browser - AI-Powered Cloud Browser Service', it is '{page_title}'"
         page.screenshot(path="screenshot.png")
-        input("Press Enter to continue...")
+        input("Press Enter to continue....")
 
         page.close()
         browser.close()
