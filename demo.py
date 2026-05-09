@@ -1,4 +1,5 @@
 import argparse
+from typing import Optional
 
 from dotenv import load_dotenv
 from lexmount import Lexmount
@@ -7,13 +8,13 @@ from playwright.sync_api import Playwright, sync_playwright
 load_dotenv(override=True)
 
 
-def build_client(region: str | None) -> Lexmount:
+def build_client(region: Optional[str]) -> Lexmount:
     if region:
         return Lexmount(region=region)
     return Lexmount()
 
 
-def run(playwright: Playwright, region: str | None = None) -> None:
+def run(playwright: Playwright, region: Optional[str] = None) -> None:
     lm = build_client(region)
 
     with lm.sessions.create() as session:
