@@ -10,6 +10,7 @@ This example demonstrates:
 import argparse
 import sys
 from pathlib import Path
+from typing import Optional
 
 from dotenv import load_dotenv
 from lexmount import APIError, Lexmount, set_log_level
@@ -62,7 +63,7 @@ def get_extension_details(extension_id: str):
         return None
 
 
-def upload_extension(file_path: str, name: str | None = None):
+def upload_extension(file_path: str, name: Optional[str] = None):
     """Upload an extension archive."""
     archive_path = Path(file_path).expanduser().resolve()
     if not archive_path.exists():
