@@ -38,7 +38,7 @@ Quick start examples for Lexmount Python SDK.
 - Print each target's `inspectUrl`, page URL, and websocket URL
 
 ### catalog_info.py - Catalog Info Demo
-- Uses `lexmount==0.5.1`
+- Uses the SDK version from `requirements.txt`
 - Query the public endpoint catalog through `client.catalog_info()`
 - Print available regions, host, and endpoint IPs
 
@@ -51,6 +51,11 @@ Quick start examples for Lexmount Python SDK.
 - Build a direct websocket URL from `LEXMOUNT_BASE_URL`
 - Connect through `/connection?project_id=...&api_key=...`
 - Visit `https://example.com` and save `connection_demo.png`
+
+### custom_image_demo.py - Custom Image Demo
+- Create a browser session with `custom_image_id`
+- Accept `--custom_image_id` from the command line
+- Connect to the session and verify the browser can open a page
 
 ### session_downloads.py - Session Downloads Demo
 - Explicitly configure `Browser.setDownloadBehavior` to `/config/Downloads`
@@ -86,5 +91,6 @@ python3 inspect_url_demo.py  # Inspect URL demo
 python3 session_targets.py   # Session targets demo
 python3 catalog_info.py      # Public endpoint catalog demo
 python3 connection_demo.py   # Direct connection demo
+python3 custom_image_demo.py --custom_image_id code.lexmount.net/neng/chrome:tag
 python3 session_downloads.py # Session downloads demo
 ```
