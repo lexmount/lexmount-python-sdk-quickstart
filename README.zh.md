@@ -38,7 +38,7 @@
 - 打印每个 target 的 `inspectUrl`、页面 URL 和 websocket URL
 
 ### catalog_info.py - Catalog Info 演示
-- 使用 `lexmount==0.5.1`
+- 使用 `requirements.txt` 中的 SDK 版本
 - 通过 `client.catalog_info()` 查询 public endpoint catalog
 - 打印可用 region、host 和 endpoint IP
 
@@ -51,6 +51,11 @@
 - 根据 `LEXMOUNT_BASE_URL` 组装直连 websocket 地址
 - 通过 `/connection?project_id=...&api_key=...` 连接
 - 访问 `https://example.com` 并保存 `connection_demo.png`
+
+### custom_image_demo.py - 自定义镜像演示
+- 使用 `custom_image_id` 创建浏览器会话
+- 支持从命令行传入 `--custom_image_id`
+- 连接会话并验证浏览器可以打开页面
 
 ---
 
@@ -80,4 +85,5 @@ python3 inspect_url_demo.py  # Inspect URL 演示
 python3 session_targets.py   # Session targets 演示
 python3 catalog_info.py      # Public endpoint catalog 演示
 python3 connection_demo.py   # 直连 websocket 演示
+python3 custom_image_demo.py --custom_image_id code.lexmount.net/neng/chrome:tag
 ```
