@@ -25,8 +25,9 @@ def run(playwright: Playwright, custom_image_id: str, region: Optional[str] = No
         context = browser.contexts[0]
         page = context.pages[0]
 
-        page.goto("https://browser.lexmount.cn/")
+        page.goto("https://news.163.com/")
         print(f"Page title: {page.title()}")
+        input("Press Enter to continue....")
 
         page.close()
         browser.close()
