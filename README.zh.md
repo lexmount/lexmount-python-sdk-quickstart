@@ -57,6 +57,16 @@
 - 支持从命令行传入 `--custom_image_id`
 - 连接会话并验证浏览器可以打开页面
 
+### wpt_demo.py - Web Platform Tests 演示
+- 在 Lexmount 浏览器会话中打开 web-platform-tests runner
+- 支持 `--count` 并发打开多个浏览器实例执行测试
+- 支持 `--path` 指定要执行的 WPT 路径
+
+### cpu_load_demo.py - CPU 负载演示
+- 创建一个或多个 Lexmount 浏览器会话
+- 默认每个会话打开 4 个页面
+- 每个页面注入持续执行 `Math.sqrt(Math.random())` 的 JavaScript，提高浏览器 CPU 负载
+
 ---
 
 ## 🚀 快速开始
@@ -86,4 +96,6 @@ python3 session_targets.py   # Session targets 演示
 python3 catalog_info.py      # Public endpoint catalog 演示
 python3 connection_demo.py   # 直连 websocket 演示
 python3 custom_image_demo.py --custom_image_id code.lexmount.net/neng/chrome:tag
+python3 wpt_demo.py --count 2 --path /dom/historical.html
+python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 ```
