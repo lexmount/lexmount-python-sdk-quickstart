@@ -62,6 +62,11 @@
 - 支持 `--count` 并发打开多个浏览器实例执行测试
 - 支持 `--path` 指定要执行的 WPT 路径
 
+### cpu_load_demo.py - CPU 负载演示
+- 支持 `--count` 并发创建多个 Lexmount 浏览器会话
+- 支持 `--pages` 控制每个会话打开的页面数量，默认 4 个
+- 每个页面注入持续执行 `Math.sqrt(Math.random())` 的 JavaScript，提高浏览器 CPU 负载
+
 ---
 
 ## 🚀 快速开始
@@ -92,4 +97,5 @@ python3 catalog_info.py      # Public endpoint catalog 演示
 python3 connection_demo.py   # 直连 websocket 演示
 python3 custom_image_demo.py --custom_image_id code.lexmount.net/neng/chrome:tag
 python3 wpt_demo.py --count 2 --path /dom/historical.html
+python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 ```
