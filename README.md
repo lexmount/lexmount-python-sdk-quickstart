@@ -62,6 +62,11 @@ Quick start examples for Lexmount Python SDK.
 - Accept `--count` to run multiple concurrent browser instances
 - Accept `--path` to choose the WPT path being tested
 
+### cpu_load_demo.py - CPU Load Demo
+- Create concurrent Lexmount browser sessions with `--count`
+- Open multiple pages in each session with `--pages`, defaulting to 4
+- Inject continuous `Math.sqrt(Math.random())` JavaScript to increase browser CPU load
+
 ### session_downloads.py - Session Downloads Demo
 - Explicitly configure `Browser.setDownloadBehavior` to `/config/Downloads`
 - Trigger a file download in the remote browser
@@ -98,5 +103,6 @@ python3 catalog_info.py      # Public endpoint catalog demo
 python3 connection_demo.py   # Direct connection demo
 python3 custom_image_demo.py --custom_image_id code.lexmount.net/neng/chrome:tag
 python3 wpt_demo.py --count 2 --path /dom/historical.html
+python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 python3 session_downloads.py # Session downloads demo
 ```
