@@ -57,6 +57,11 @@
 - 支持从命令行传入 `--custom_image_id`
 - 连接会话并验证浏览器可以打开页面
 
+### window_size_demo.py - 窗口尺寸演示
+- 使用 `window_size` 创建浏览器会话
+- 支持从命令行传入 `--window_size`，默认 `1920,1080`
+- 连接会话并打印初始 viewport
+
 ### wpt_demo.py - Web Platform Tests 演示
 - 在 Lexmount 浏览器会话中打开 web-platform-tests runner
 - 支持 `--count` 并发打开多个浏览器实例执行测试
@@ -96,6 +101,7 @@ python3 session_targets.py   # Session targets 演示
 python3 catalog_info.py      # Public endpoint catalog 演示
 python3 connection_demo.py   # 直连 websocket 演示
 python3 custom_image_demo.py --custom_image_id code.lexmount.net/neng/chrome:tag
+python3 window_size_demo.py --window_size 1920,1080
 python3 wpt_demo.py --count 2 --path /dom/historical.html
 python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 ```

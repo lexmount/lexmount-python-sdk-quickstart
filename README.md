@@ -57,6 +57,11 @@ Quick start examples for Lexmount Python SDK.
 - Accept `--custom_image_id` from the command line
 - Connect to the session and verify the browser can open a page
 
+### window_size_demo.py - Window Size Demo
+- Create a browser session with `window_size`
+- Accept `--window_size`, defaulting to `1920,1080`
+- Connect to the session and print the initial viewport
+
 ### wpt_demo.py - Web Platform Tests Demo
 - Open the web-platform-tests runner in Lexmount browser sessions
 - Accept `--count` to run multiple concurrent browser instances
@@ -102,6 +107,7 @@ python3 session_targets.py   # Session targets demo
 python3 catalog_info.py      # Public endpoint catalog demo
 python3 connection_demo.py   # Direct connection demo
 python3 custom_image_demo.py --custom_image_id code.lexmount.net/neng/chrome:tag
+python3 window_size_demo.py --window_size 1920,1080
 python3 wpt_demo.py --count 2 --path /dom/historical.html
 python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 python3 session_downloads.py # Session downloads demo
