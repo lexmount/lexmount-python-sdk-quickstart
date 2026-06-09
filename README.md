@@ -27,6 +27,10 @@ Quick start examples for Lexmount Python SDK.
 - Create a browser session with `proxy`
 - Verify the remote browser can use authenticated upstream proxy
 
+### official_proxy_demo.py - Official Proxy Demo
+- Create a browser session with `official_proxy=True`
+- Verify the remote browser can use the Lexmount official proxy pool
+
 ### inspect_url_demo.py - Inspect URL Demo
 - Create a browser session
 - Print the `inspect_url` for manual inspection
@@ -102,6 +106,7 @@ python3 light_demo.py        # Light browser demo
 python3 context_fork.py <context_id>  # Context fork demo
 python3 extension_basic.py   # Extension demo
 python3 proxy_demo.py        # Proxy demo
+python3 official_proxy_demo.py # Official proxy demo
 python3 inspect_url_demo.py  # Inspect URL demo
 python3 session_targets.py   # Session targets demo
 python3 catalog_info.py      # Public endpoint catalog demo

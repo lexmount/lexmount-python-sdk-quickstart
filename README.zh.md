@@ -27,6 +27,10 @@
 - 使用 `proxy` 参数创建浏览器会话
 - 验证远端浏览器通过带认证的上游代理访问外网
 
+### official_proxy_demo.py - 官方代理演示
+- 使用 `official_proxy=True` 创建浏览器会话
+- 验证远端浏览器可以使用 Lexmount 官方代理池
+
 ### inspect_url_demo.py - Inspect URL 演示
 - 创建浏览器会话
 - 打印 `inspect_url` 供用户手动打开检查
@@ -96,6 +100,7 @@ python3 light_demo.py        # 轻量浏览器演示
 python3 context_fork.py <context_id>  # Context Fork 演示
 python3 extension_basic.py   # 插件演示
 python3 proxy_demo.py        # 代理演示
+python3 official_proxy_demo.py # 官方代理演示
 python3 inspect_url_demo.py  # Inspect URL 演示
 python3 session_targets.py   # Session targets 演示
 python3 catalog_info.py      # Public endpoint catalog 演示
