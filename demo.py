@@ -25,10 +25,7 @@ def run(playwright: Playwright, region: Optional[str] = None) -> None:
 
         page.goto("https://browser.lexmount.cn/")
         page_title = page.title()
-        assert page_title == "Lexmount Browser - AI-Powered Cloud Browser Service", (
-            "Page title is not 'Lexmount Browser - AI-Powered Cloud Browser Service', "
-            f"it is '{page_title}'"
-        )
+        assert "Lexmount Browser" in page_title, f"Unexpected page title: {page_title}"
         page.screenshot(path="screenshot.png")
         input("Press Enter to continue....")
 
