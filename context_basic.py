@@ -32,11 +32,13 @@ def main():
             print(f"\n1. Using existing context ID: {context_id}")
         else:
             context = client.contexts.create(
+                description="Quickstart login context",
                 metadata={
                     # add your metadata here
                 }
             )
             context_id = context.id
+            print(f"\n1. Created context: {context.display_name} ({context_id})")
 
         with sync_playwright() as playwright:
             with client.sessions.create(context={"id": context_id, "mode": "read_write"}) as session:
@@ -46,7 +48,7 @@ def main():
                     context = browser.contexts[0]
                     page = context.pages[0]
                     page.goto("https://www.baidu.com/")
-                    print(f"   ✓ Context created with ID: {context_id}")
+                    print(f"   ✓ Session created with context: {context_id}")
                     input("\n   Press Enter to continue...")
                 except Exception as e:
                     print(f"   ✗ Failed to connect to the remote session: {e}")

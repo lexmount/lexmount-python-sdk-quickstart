@@ -46,6 +46,16 @@ Quick start examples for Lexmount Python SDK.
 - Query the public endpoint catalog through `client.catalog_info()`
 - Print available regions, host, and endpoint IPs
 
+### context_basic.py - Context Description Demo
+- Create a context with `description`
+- Start a `read_write` session with that context
+- Print the context display name and ID
+
+### context_list_get.py - Context List/Get Demo
+- List contexts and print `display_name`
+- Get details for a specific context
+- Print `description` when present
+
 ### context_fork.py - Context Fork Demo
 - Accept an existing source `context_id`
 - Fork it into a new context
@@ -103,6 +113,8 @@ cp .env.example .env
 # 4. Run examples
 python3 demo.py              # Basic demo
 python3 light_demo.py        # Light browser demo
+python3 context_basic.py     # Context description demo
+python3 context_list_get.py  # Context list/get demo
 python3 context_fork.py <context_id>  # Context fork demo
 python3 extension_basic.py   # Extension demo
 python3 proxy_demo.py        # Proxy demo

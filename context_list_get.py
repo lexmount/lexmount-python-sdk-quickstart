@@ -34,8 +34,11 @@ def list_all_contexts():
 
         for ctx in contexts:
             status_icon = "🔒" if ctx.is_locked() else "✅"
-            print(f"\n   {status_icon} Context ID: {ctx.id}")
+            print(f"\n   {status_icon} Context: {ctx.display_name}")
+            print(f"      ID: {ctx.id}")
             print(f"      Status: {ctx.status}")
+            if ctx.description:
+                print(f"      Description: {ctx.description}")
             if ctx.created_at:
                 print(f"      Created: {ctx.created_at}")
             if ctx.updated_at:
@@ -51,7 +54,10 @@ def get_context_details(context_id: str):
 
     try:
         ctx = client.contexts.get(context_id)
+        print(f"      Display Name: {ctx.display_name}")
         print(f"      Status: {ctx.status}")
+        if ctx.description:
+            print(f"      Description: {ctx.description}")
         if ctx.is_locked():
             print(f"      🔒 Locked")
         else:

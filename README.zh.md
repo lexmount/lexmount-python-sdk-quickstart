@@ -46,6 +46,16 @@
 - 通过 `client.catalog_info()` 查询 public endpoint catalog
 - 打印可用 region、host 和 endpoint IP
 
+### context_basic.py - Context 描述演示
+- 创建带 `description` 的 context
+- 使用该 context 启动 `read_write` 会话
+- 打印 context 展示名称和 ID
+
+### context_list_get.py - Context 列表与详情演示
+- 列出 context 并打印 `display_name`
+- 获取指定 context 详情
+- 存在 `description` 时打印描述
+
 ### context_fork.py - Context Fork 演示
 - 传入一个已有的 source `context_id`
 - 基于 source fork 出新的 context
@@ -97,6 +107,8 @@ cp .env.example .env
 # 4. 运行示例
 python3 demo.py              # 基础演示
 python3 light_demo.py        # 轻量浏览器演示
+python3 context_basic.py     # Context 描述演示
+python3 context_list_get.py  # Context 列表与详情演示
 python3 context_fork.py <context_id>  # Context Fork 演示
 python3 extension_basic.py   # 插件演示
 python3 proxy_demo.py        # 代理演示
