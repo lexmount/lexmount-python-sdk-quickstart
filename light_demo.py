@@ -14,7 +14,11 @@ def run(playwright: Playwright) -> None:
     lm = Lexmount()  # Reads credentials from environment variables
     
     # Create a session with chrome-light-docker
-    with lm.sessions.create(browser_mode="light") as session:
+    with lm.sessions.create(
+        browser_mode="light",
+        # Set False to disable MOLI_RESOURCE for only this Light session.
+        enable_lightmount_resource=True,
+    ) as session:
     
         # Connect to the remote session
         chromium = playwright.chromium

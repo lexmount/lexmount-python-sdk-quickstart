@@ -112,7 +112,7 @@ cp .env.example .env
 
 # 4. Run examples
 python3 demo.py              # Basic demo
-python3 light_demo.py        # Light browser demo
+python3 light_demo.py        # Light browser + per-session layout resource switch
 python3 context_basic.py     # Context description demo
 python3 context_list_get.py  # Context list/get demo
 python3 context_fork.py <context_id>  # Context fork demo
