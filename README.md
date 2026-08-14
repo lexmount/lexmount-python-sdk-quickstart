@@ -15,6 +15,7 @@ Quick start examples for Lexmount Python SDK.
 
 ### light-demo.py - Light Browser Demo
 - Use `chrome-light-docker` mode
+- Enable LightMount layout and show its per-session `enable_lightmount_resource` switch
 - Visit Sina News
 - Extract all links and save to `links.txt`
 

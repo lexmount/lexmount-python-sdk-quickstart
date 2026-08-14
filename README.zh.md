@@ -15,6 +15,7 @@
 
 ### light-demo.py - 轻量浏览器演示
 - 使用 `chrome-light-docker` 模式
+- 显式开启 LightMount layout，并展示单会话 `enable_lightmount_resource` 开关
 - 访问新浪新闻
 - 提取所有链接并保存到 `links.txt`
 
