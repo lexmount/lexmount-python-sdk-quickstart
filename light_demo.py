@@ -16,7 +16,8 @@ def run(playwright: Playwright) -> None:
     # Create a session with chrome-light-docker
     with lm.sessions.create(
         browser_mode="light",
-        # Set False to disable MOLI_RESOURCE for only this Light session.
+        enable_lightmount_layout=True,
+        # Set False to disable MOLI_RESOURCE while keeping layout enabled.
         enable_lightmount_resource=True,
     ) as session:
     
