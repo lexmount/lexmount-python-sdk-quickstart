@@ -3,11 +3,11 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
 
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 from lexmount import Lexmount
 from playwright.sync_api import sync_playwright
 
-load_dotenv(override=True)
+load_environment()
 
 DEFAULT_URL = "https://browser.lexmount.cn/"
 DEFAULT_PAGES_PER_SESSION = 4
@@ -92,6 +92,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    prepare_demo()
     if args.count <= 0:
         raise ValueError("--count must be greater than 0")
     if args.pages <= 0:

@@ -9,21 +9,18 @@ This example demonstrates how to:
 import os
 from urllib.parse import urlparse
 
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 from lexmount import Lexmount
 
-load_dotenv(override=True)
+load_environment()
 
-API_KEY = os.getenv("LEXMOUNT_API_KEY")
-PROJECT_ID = os.getenv("LEXMOUNT_PROJECT_ID")
-BASE_URL = os.getenv("LEXMOUNT_BASE_URL")
 
 
 def create_client(region=None):
     return Lexmount(
-        api_key=API_KEY,
-        project_id=PROJECT_ID,
-        base_url=BASE_URL,
+        api_key=os.getenv("LEXMOUNT_API_KEY"),
+        project_id=os.getenv("LEXMOUNT_PROJECT_ID"),
+        base_url=os.getenv("LEXMOUNT_BASE_URL"),
         region=region,
     )
 
@@ -75,6 +72,7 @@ def print_session(index, session, region_id, region_by_host):
 
 
 def main():
+    prepare_demo()
     print("=== Lexmount Session Region List ===\n")
 
     catalog_client = create_client()

@@ -1,15 +1,16 @@
 from pprint import pprint
 
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 
 import lexmount
 from lexmount import Lexmount
 
 
-load_dotenv(override=True)
+load_environment()
 
 
 def main() -> None:
+    prepare_demo()
     client = Lexmount()
 
     print(f"lexmount version: {lexmount.__version__}")

@@ -2,11 +2,11 @@ import argparse
 import os
 from typing import Optional
 
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 from lexmount import Lexmount
 from playwright.sync_api import Playwright, sync_playwright
 
-load_dotenv(override=True)
+load_environment()
 
 
 def build_client(region: Optional[str]) -> Lexmount:
@@ -52,5 +52,6 @@ def parse_args() -> argparse.Namespace:
 
 if __name__ == "__main__":
     args = parse_args()
+    prepare_demo()
     with sync_playwright() as playwright:
         run(playwright, window_size=args.window_size, region=args.region)

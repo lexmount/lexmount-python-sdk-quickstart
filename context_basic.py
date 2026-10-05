@@ -5,22 +5,25 @@ This example demonstrates:
 - Creating a session with context (read_write mode)
 """
 from lexmount import Lexmount, set_log_level
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 import argparse
 from playwright.sync_api import sync_playwright
 
-load_dotenv(override=True)
+load_environment()
 
 # Set logging to DEBUG to see detailed request/response
 set_log_level("WARNING")
 
-client = Lexmount()
+client: Lexmount
 
 def main():
     """Demonstrate basic context operations."""
     parser = argparse.ArgumentParser(description="Context management basic operations")
     parser.add_argument("--context-id", help="Use this context ID directly; if omitted, create a new context")
     args = parser.parse_args()
+    prepare_demo()
+    global client
+    client = Lexmount()
 
     print("=" * 60)
     print("Context Management - Basic Operations")
