@@ -107,7 +107,7 @@ pip install -r requirements.txt
 
 # 3. Create .env file
 cp .env.example .env
-# Edit .env and fill in your actual API Key and Project ID
+# On a local macOS/Windows terminal, missing credentials trigger browser sign-in.
 # For office test environment:
 # LEXMOUNT_BASE_URL=https://apitest.local.lexmount.net
 
@@ -130,3 +130,17 @@ python3 wpt_demo.py --count 2 --path /dom/historical.html
 python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 python3 session_downloads.py # Session downloads demo
 ```
+
+
+## Credentials and browser sign-in
+
+Every demo checks `LEXMOUNT_PROJECT_ID` and `LEXMOUNT_API_KEY` before making API requests. It loads `.env` from the **current working directory**, with `.env` taking precedence over exported environment variables. Empty values and the example placeholders count as missing. Existing complete credentials are used without opening a browser.
+
+- Default API: `https://api.lexmount.com`; website: `https://browser.lexmount.com`.
+- With missing credentials, an interactive local **macOS or Windows** terminal opens the system browser for sign-in and authorization. Return to the terminal after approving; the demo continues automatically.
+- The PKCE flow uses a temporary `127.0.0.1` callback and exchanges a one-time code over HTTPS. Both credentials and the matching API base URL are saved together to `.env`, preserving unrelated settings. Newly written files have owner-only permissions on POSIX systems; on Windows protect the project directory with your user account's ACLs.
+- On Linux, SSH, CI, non-interactive terminals, or when browser authorization fails/times out (3 minutes), the demo exits with website/manual setup instructions. Fill in the two values and rerun. You can also set both environment variables without an `.env` file in CI.
+- Explicit `https://api.lexmount.cn` uses `https://browser.lexmount.cn` for authorization. Other custom API URLs are preserved and require manual credentials from their matching environment; they never silently log in to `.com`.
+- No credentials are saved on an unsuccessful exchange. If `.env` is changed while signing in, rerun the demo to avoid overwriting those edits. Do not commit `.env`.
+
+Run examples from this repository directory so they share the same `.env`.

@@ -9,17 +9,17 @@ This example demonstrates:
 - Deleting contexts (success and failure cases)
 """
 from lexmount import Lexmount, ContextNotFoundError, APIError, set_log_level
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 from pathlib import Path
 import argparse
 import sys
 
-load_dotenv(override=True)
+load_environment()
 
 # Set logging level (use DEBUG to see detailed request/response)
 set_log_level("WARNING")
 
-client = Lexmount()
+client: Lexmount
 
 def list_all_contexts():
     """List all contexts in the project."""
@@ -116,6 +116,9 @@ def main():
         help="Show details for the given context ID",
     )
     args = parser.parse_args()
+    prepare_demo()
+    global client
+    client = Lexmount()
 
     print("=" * 60)
     print("Context Management - List, Get & Delete Demo")

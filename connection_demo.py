@@ -1,11 +1,11 @@
 from urllib.parse import urlencode, urlparse, urlunparse
 
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 
 from lexmount import Lexmount
 from playwright.sync_api import Playwright, sync_playwright
 
-load_dotenv(override=True)
+load_environment()
 
 
 def build_connection_url(client: Lexmount) -> str:
@@ -24,7 +24,7 @@ def run(playwright: Playwright) -> None:
     client = Lexmount()
     connection_url = build_connection_url(client)
 
-    print(f"connection_url: {connection_url}")
+    print("Connecting through /connection (credentials omitted).")
 
     browser = playwright.chromium.connect_over_cdp(connection_url)
     context = browser.contexts[0]
@@ -42,5 +42,6 @@ def run(playwright: Playwright) -> None:
 
 
 if __name__ == "__main__":
+    prepare_demo()
     with sync_playwright() as playwright:
         run(playwright)

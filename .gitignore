@@ -31,3 +31,6 @@ __pycache__/
 
 links.txt
 links0.txt
+
+# Temporary credential files used by atomic .env updates
+.env.*.tmp

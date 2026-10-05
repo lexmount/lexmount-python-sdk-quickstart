@@ -101,7 +101,7 @@ pip install -r requirements.txt
 
 # 3. 创建 .env 文件
 cp .env.example .env
-# 编辑 .env 填入实际的 API Key 和 Project ID
+# 本地 macOS/Windows 终端缺少凭据时会自动打开浏览器登录。
 # office 测试环境可设置:
 # LEXMOUNT_BASE_URL=https://apitest.local.lexmount.net
 
@@ -123,3 +123,17 @@ python3 window_size_demo.py --window_size 1920,1080
 python3 wpt_demo.py --count 2 --path /dom/historical.html
 python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 ```
+
+
+## 凭据检查与浏览器登录
+
+所有 demo 都会在调用 API 前检查 `LEXMOUNT_PROJECT_ID` 和 `LEXMOUNT_API_KEY`。读取的是**当前工作目录**的 `.env`，其中的值优先于已导出的环境变量；空值及模板占位值视为未配置。已有完整凭据时直接运行，不打开浏览器。
+
+- 默认 API 为 `https://api.lexmount.com`，对应官网为 `https://browser.lexmount.com`。
+- 在本地 **macOS / Windows 交互式终端**中缺少凭据时，自动打开系统浏览器登录并授权。批准后返回终端，demo 自动继续。
+- 使用临时 `127.0.0.1` 回调和 PKCE，通过 HTTPS 用一次性 code 换取凭据。Project ID、API Key 和匹配的 API 地址成对写入 `.env`，保留其他配置。POSIX 下新写入文件仅当前用户可读写；Windows 下请用当前用户的目录访问权限保护项目。
+- Linux、SSH、CI、非交互终端、无法打开浏览器或授权超时（3 分钟）时，程序退出并提示官网和手动配置方法；填写两个值后重跑。CI 也可直接设置两个环境变量而不创建 `.env`。
+- 显式设置 `https://api.lexmount.cn` 时，授权使用 `https://browser.lexmount.cn`。其他自定义 API 地址保持不变，请从对应环境手动获取凭据，不会自动切换到 `.com`。
+- 交换失败时不写入凭据；若授权期间修改了 `.env`，请重跑以免覆盖改动。不要提交 `.env`。
+
+请在仓库目录执行各 demo，让它们共用同一个 `.env`。

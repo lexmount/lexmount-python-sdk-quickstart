@@ -12,14 +12,14 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 from lexmount import APIError, Lexmount, set_log_level
 
-load_dotenv(override=True)
+load_environment()
 
 set_log_level("WARNING")
 
-client = Lexmount()
+client: Lexmount
 
 
 def list_all_extensions():
@@ -148,6 +148,9 @@ def main():
         help="Delete all extensions in the current project",
     )
     args = parser.parse_args()
+    prepare_demo()
+    global client
+    client = Lexmount()
 
     print("=" * 60)
     print("Extension Management - List, Get, Upload & Delete Demo")

@@ -2,11 +2,11 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Optional
 
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 from lexmount import Lexmount
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError, sync_playwright
 
-load_dotenv(override=True)
+load_environment()
 
 DEFAULT_WPT_RUNNER_URL = "https://wpt.live/tools/runner/index.html"
 DEFAULT_TEST_PATH = "/dom/historical.html"
@@ -116,6 +116,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    prepare_demo()
     if args.count <= 0:
         raise ValueError("--count must be greater than 0")
     if not args.path.startswith("/"):

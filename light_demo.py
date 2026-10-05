@@ -1,9 +1,9 @@
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 from lexmount import Lexmount
 from playwright.sync_api import Playwright, sync_playwright
 
 # Load environment variables first
-load_dotenv(override=True)
+load_environment()
 
 
 def run(playwright: Playwright) -> None:
@@ -47,5 +47,6 @@ def run(playwright: Playwright) -> None:
 
 
 if __name__ == "__main__":
+    prepare_demo()
     with sync_playwright() as playwright:
         run(playwright)

@@ -8,17 +8,20 @@ This example demonstrates:
 """
 from pathlib import Path
 
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 from lexmount import Lexmount, set_log_level
 from playwright.sync_api import sync_playwright
 
-load_dotenv(override=True)
+load_environment()
 set_log_level("WARNING")
 
-client = Lexmount()
+client: Lexmount
 
 
 def main():
+    prepare_demo()
+    global client
+    client = Lexmount()
     base_dir = Path(__file__).resolve().parent.parent
     extension_zip = base_dir / "test_extension.zip"
 

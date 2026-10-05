@@ -7,19 +7,22 @@ This example demonstrates:
 - Printing the forked context id
 """
 import argparse
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 
-load_dotenv(override=True)
+load_environment()
 
 from lexmount import ContextLockedError, ContextNotFoundError, Lexmount
 
-client = Lexmount()
+client: Lexmount
 
 
 def main():
     parser = argparse.ArgumentParser(description="Fork an existing context and print the new context id")
     parser.add_argument("context_id", help="Existing source context id")
     args = parser.parse_args()
+    prepare_demo()
+    global client
+    client = Lexmount()
 
     try:
         forked = client.contexts.fork(args.context_id)

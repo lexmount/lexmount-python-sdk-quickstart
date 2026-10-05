@@ -1,11 +1,11 @@
 from pathlib import Path
 import time
 
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 from lexmount import Lexmount
 from playwright.sync_api import Playwright, sync_playwright
 
-load_dotenv(override=True)
+load_environment()
 
 DOWNLOAD_URL = "https://proof.ovh.net/files/1Mb.dat"
 DOWNLOAD_TIMEOUT_SECONDS = 60
@@ -58,5 +58,6 @@ def run(playwright: Playwright) -> None:
 
 
 if __name__ == "__main__":
+    prepare_demo()
     with sync_playwright() as playwright:
         run(playwright)

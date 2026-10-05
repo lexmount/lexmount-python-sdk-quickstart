@@ -1,11 +1,12 @@
-from dotenv import load_dotenv
+from quickstart_auth import load_environment, prepare_demo
 
 from lexmount import Lexmount
 
-load_dotenv(override=True)
+load_environment()
 
 
 def main() -> None:
+    prepare_demo()
     client = Lexmount()
 
     with client.sessions.create() as session:
