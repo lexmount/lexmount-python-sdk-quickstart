@@ -28,6 +28,10 @@
 - 使用 `proxy` 参数创建浏览器会话
 - 验证远端浏览器通过带认证的上游代理访问外网
 
+### local_proxy_demo.py - 本地网络代理示例
+- 通过 SDK 所在机器的网络和 DNS 访问内网页面
+- 打开隧道、访问并截图，结束或失败时清理会话和隧道
+
 ### official_proxy_demo.py - 官方代理演示
 - 使用 `official_proxy=True` 创建浏览器会话
 - 验证远端浏览器可以使用 Lexmount 官方代理池
@@ -113,6 +117,7 @@ python3 context_list_get.py  # Context 列表与详情演示
 python3 context_fork.py <context_id>  # Context Fork 演示
 python3 extension_basic.py   # 插件演示
 python3 proxy_demo.py        # 代理演示
+python3 local_proxy_demo.py --url http://oa.company.internal/
 python3 official_proxy_demo.py # 官方代理演示
 python3 inspect_url_demo.py  # Inspect URL 演示
 python3 session_targets.py   # Session targets 演示
@@ -137,3 +142,23 @@ python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 - 交换失败时不写入凭据；若授权期间修改了 `.env`，请重跑以免覆盖改动。不要提交 `.env`。
 
 请在仓库目录执行各 demo，让它们共用同一个 `.env`。
+
+## 通过本地代理访问公司内网
+
+`local_proxy_demo.py` 使用 SDK **0.6.0**，先打开独立的本地网络隧道，再创建使用该隧道的 normal 云浏览器。请在已接入公司网络或 VPN 的机器上运行；目标域名解析和 TCP 连接由这台机器完成。API 环境和所选区域需要部署本地代理网关，项目需要启用 `custom_proxy`。
+
+安装依赖并配置凭据后运行：
+
+```bash
+python3 local_proxy_demo.py --url http://oa.company.internal/
+# 可选：指定 LEXMOUNT_BASE_URL 对应目录中的区域
+python3 local_proxy_demo.py --url http://oa.company.internal/ --region <region-id>
+```
+
+也可以在 `.env` 中设置 `LEXMOUNT_LOCAL_PROXY_URL` 和可选的 `LEXMOUNT_REGION`；命令行参数优先。`--help` 无需凭据，也不会访问 API。区域列表可通过 `python3 catalog_info.py` 查询。
+
+demo 输出页面标题、保存 `local_proxy_demo.png`，随后关闭浏览器、云端会话、隧道和客户端。导航失败时也会清理会话与隧道。整个流程使用同一个客户端，保持 Project ID、API Key 和区域一致。
+
+目标请使用内网域名或局域网 IP。Chrome 对 localhost、回环及链路本地地址有[默认绕过代理规则](https://chromium.googlesource.com/chromium/src/+/HEAD/net/docs/proxy.md#implicit-bypass-rules)，因此不要用 `127.0.0.1` 作为本示例的目标地址。网站登录状态和证书信任仍由云浏览器自行处理。
+
+声明的 SDK 0.6.0 需要先发布到 PyPI，标准依赖安装命令才能成功。

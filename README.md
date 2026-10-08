@@ -28,6 +28,10 @@ Quick start examples for Lexmount Python SDK.
 - Create a browser session with `proxy`
 - Verify the remote browser can use authenticated upstream proxy
 
+### local_proxy_demo.py - Local network proxy demo
+- Access an internal page using the SDK machine's network and DNS
+- Open a tunnel, navigate and screenshot, then clean up the session and tunnel
+
 ### official_proxy_demo.py - Official Proxy Demo
 - Create a browser session with `official_proxy=True`
 - Verify the remote browser can use the Lexmount official proxy pool
@@ -119,6 +123,7 @@ python3 context_list_get.py  # Context list/get demo
 python3 context_fork.py <context_id>  # Context fork demo
 python3 extension_basic.py   # Extension demo
 python3 proxy_demo.py        # Proxy demo
+python3 local_proxy_demo.py --url http://oa.company.internal/
 python3 official_proxy_demo.py # Official proxy demo
 python3 inspect_url_demo.py  # Inspect URL demo
 python3 session_targets.py   # Session targets demo
@@ -144,3 +149,23 @@ Every demo checks `LEXMOUNT_PROJECT_ID` and `LEXMOUNT_API_KEY` before making API
 - No credentials are saved on an unsuccessful exchange. If `.env` is changed while signing in, rerun the demo to avoid overwriting those edits. Do not commit `.env`.
 
 Run examples from this repository directory so they share the same `.env`.
+
+## Access your company network with the local proxy
+
+`local_proxy_demo.py` uses SDK **0.6.0**, opens a separate local-network tunnel, then creates a normal cloud browser with that tunnel. Run it on the machine connected to your company network or VPN. Target DNS and TCP connections use this machine's network. The API environment and selected region must have the local proxy gateway deployed, and the project must have `custom_proxy` enabled.
+
+After installing dependencies and setting credentials, run:
+
+```bash
+python3 local_proxy_demo.py --url http://oa.company.internal/
+# Optional: select a catalog region available at LEXMOUNT_BASE_URL
+python3 local_proxy_demo.py --url http://oa.company.internal/ --region <region-id>
+```
+
+Alternatively, set `LEXMOUNT_LOCAL_PROXY_URL` and optional `LEXMOUNT_REGION` in `.env`; explicit CLI flags override these values. `--help` works without credentials or API access. Use `python3 catalog_info.py` for available regions.
+
+The demo prints the page title, saves `local_proxy_demo.png`, then closes the browser, cloud session, tunnel and client. Sessions and tunnels are also closed when navigation fails. One client keeps the project, API key and region consistent.
+
+Use an internal hostname or LAN IP for the target. Chrome has [implicit proxy bypass rules](https://chromium.googlesource.com/chromium/src/+/HEAD/net/docs/proxy.md#implicit-bypass-rules) for localhost/loopback and link-local addresses, so `127.0.0.1` is not a reliable address for this demo. The cloud browser still needs its own website login and certificate trust.
+
+The declared SDK 0.6.0 dependency must be published to PyPI before the standard dependency-install command can succeed.
