@@ -155,10 +155,8 @@ python3 local_proxy_demo.py --url http://oa.company.internal/
 python3 local_proxy_demo.py --url http://oa.company.internal/ --region <region-id>
 ```
 
-也可以在 `.env` 中设置 `LEXMOUNT_LOCAL_PROXY_URL` 和可选的 `LEXMOUNT_REGION`；命令行参数优先。`--help` 无需凭据，也不会访问 API。区域列表可通过 `python3 catalog_info.py` 查询。
+目标网址必须通过 `--url` 指定。可在 `.env` 中设置 `LEXMOUNT_REGION`，`--region` 优先。`--help` 无需凭据，也不会访问 API。
 
-demo 输出页面标题、保存 `local_proxy_demo.png`，随后关闭浏览器、云端会话、隧道和客户端。导航失败时也会清理会话与隧道。整个流程使用同一个客户端，保持 Project ID、API Key 和区域一致。
+demo 输出页面标题、保存 `local_proxy_demo.png`，随后等待用户按任意键，再关闭浏览器、云端会话、隧道和客户端。等待期间浏览器和本地隧道保持可用；Ctrl+C 也会触发清理。非交互运行遇到输入结束时直接清理。导航失败时也会清理会话与隧道。整个流程使用同一个客户端，保持 Project ID、API Key 和区域一致。
 
 目标请使用内网域名或局域网 IP。Chrome 对 localhost、回环及链路本地地址有[默认绕过代理规则](https://chromium.googlesource.com/chromium/src/+/HEAD/net/docs/proxy.md#implicit-bypass-rules)，因此不要用 `127.0.0.1` 作为本示例的目标地址。网站登录状态和证书信任仍由云浏览器自行处理。
-
-声明的 SDK 0.6.0 需要先发布到 PyPI，标准依赖安装命令才能成功。

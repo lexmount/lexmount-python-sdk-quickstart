@@ -2,12 +2,36 @@
 
 import argparse
 import os
+import sys
 from typing import Optional
 from urllib.parse import urlsplit
 
 from lexmount import Lexmount
 from playwright.sync_api import sync_playwright
 from quickstart_auth import prepare_demo
+
+
+def wait_for_keypress() -> None:
+    print("Press any key to continue (close browser and tunnel)...", end="", flush=True)
+    try:
+        if sys.stdin.isatty() and os.name == "nt":
+            import msvcrt
+            if msvcrt.getwch() == "\x03":
+                raise KeyboardInterrupt
+        elif sys.stdin.isatty():
+            import termios
+            import tty
+            fd = sys.stdin.fileno()
+            previous = termios.tcgetattr(fd)
+            try:
+                tty.setcbreak(fd)
+                sys.stdin.read(1)
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, previous)
+        else:
+            sys.stdin.read(1)  # EOF also allows cleanup in noninteractive runs.
+    finally:
+        print()
 
 
 def run(target: str, region: Optional[str] = None) -> None:
@@ -35,6 +59,7 @@ def run(target: str, region: Optional[str] = None) -> None:
                         print(f"Page title: {page.title()}")
                         page.screenshot(path="local_proxy_demo.png")
                         print("Saved screenshot to local_proxy_demo.png")
+                        wait_for_keypress()
                     finally:
                         browser.close()
             # Session context exits before the tunnel context, including on errors.
@@ -42,14 +67,11 @@ def run(target: str, region: Optional[str] = None) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--url", help="Internal HTTP(S) URL; defaults to LEXMOUNT_LOCAL_PROXY_URL in .env.")
+    parser.add_argument("--url", required=True, help="HTTP(S) URL reachable from this machine.")
     parser.add_argument("--region", help="Catalog region ID; defaults to LEXMOUNT_REGION in .env.")
     args = parser.parse_args()
     prepare_demo()
-    target = args.url or os.getenv("LEXMOUNT_LOCAL_PROXY_URL", "").strip()
-    if not target:
-        parser.error("Set LEXMOUNT_LOCAL_PROXY_URL or pass --url with an HTTP(S) URL reachable from this machine.")
-    run(target, args.region or os.getenv("LEXMOUNT_REGION", "").strip() or None)
+    run(args.url, args.region or os.getenv("LEXMOUNT_REGION", "").strip() or None)
 
 
 if __name__ == "__main__":

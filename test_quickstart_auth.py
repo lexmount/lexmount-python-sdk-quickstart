@@ -204,6 +204,8 @@ class AuthTests(unittest.TestCase):
         for demo in demos:
             with self.subTest(demo=demo.name):
                 args = ['source-context'] if demo.name == 'context_fork.py' else []
+                if demo.name == 'local_proxy_demo.py':
+                    args = ['--url', 'http://oa.example.test/']
                 if demo.name == 'custom_image_demo.py':
                     args = ['--custom_image_id', 'test-image']
                 # Fail on any unexpected network access, even if an entry point missed bootstrap.
