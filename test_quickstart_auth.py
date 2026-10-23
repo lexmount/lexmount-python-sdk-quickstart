@@ -197,8 +197,8 @@ class AuthTests(unittest.TestCase):
 
     def test_every_demo_stops_before_network_when_headless(self):
         repo = Path(__file__).parent
-        demos = [file for file in repo.glob('*.py') if file.name not in ('quickstart_auth.py', Path(__file__).name)]
-        self.assertEqual(len(demos), 20)
+        demos = [file for file in repo.glob('*.py') if file.name not in ('quickstart_auth.py', 'browser_agent_common.py', Path(__file__).name)]
+        self.assertEqual(len(demos), 24)
         env = {key: value for key, value in os.environ.items() if not key.startswith('LEXMOUNT_')}
         env['CI'] = '1'
         for demo in demos:

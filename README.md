@@ -167,3 +167,29 @@ The target URL is required via `--url`. You can set optional `LEXMOUNT_REGION` i
 The demo prints the page title, saves `local_proxy_demo.png`, then waits for any key before closing the browser, cloud session, tunnel and client. The browser and local connector stay available while waiting; Ctrl+C also triggers cleanup. End-of-input allows noninteractive runs to finish. Sessions and tunnels are also closed when navigation fails. One client keeps the project, API key and region consistent.
 
 Use an internal hostname or LAN IP for the target. Chrome has [implicit proxy bypass rules](https://chromium.googlesource.com/chromium/src/+/HEAD/net/docs/proxy.md#implicit-bypass-rules) for localhost/loopback and link-local addresses, so `127.0.0.1` is not a reliable address for this demo. The cloud browser still needs its own website login and certificate trust.
+
+## Browser Agent API (preview)
+
+Companion SDK: [PR](https://github.com/lexmount/lexmount-python-sdk/pull/118), tested commit `b0270c23f9b763ebe1d1e535f6e498fbd06a7695`. Check out that change before the local install below.
+
+These examples require the companion Browser Agent SDK change; the current pinned SDK release does not include it yet. Install the normal requirements, then install the sibling SDK checkout into the same virtual environment: `pip install -e ../lexmount-python-sdk`. Use the API origin supplied for your deployment.
+
+```bash
+export LEXMOUNT_API_KEY='your-server-side-key'
+export LEXMOUNT_PROJECT_ID='your-project-id'
+export LEXMOUNT_BASE_URL='https://api.lexmount.com'
+python browser_agent.py
+python browser_agent_async.py
+python browser_agent_advanced.py
+python browser_agent_recovery.py
+```
+
+- Sync/async examples create a standard Run and wait; 201 means accepted. Task failure is a normal Run result.
+- The advanced example saves an Agent with a JSON Schema and `{{topic}}` variable, then reads native dictionary output and usage. The saved Agent remains available for reuse.
+- Recovery persists a business ID, exact request, idempotency key and Run ID in `browser-agent-job.json` (mode 0600). Rerun with the same file to recover. A lost response uses the original key; a known Run uses GET/wait. An unknown receipt older than 7 days requires reconciliation before a new POST.
+
+Set `RUN_IDEMPOTENCY_KEY` to reuse a Run create across retries, and a separate `AGENT_IDEMPOTENCY_KEY` for Agent creation. Repeating the advanced example requires both keys so the Agent ID in the Run request stays unchanged. Prefer the recovery example for process restarts. Separate independent creates need separate keys. SDK retries within one method call reuse its key. `RunWaitTimeout` only stops local waiting; it does not cancel or recreate the Run.
+
+Keep API keys out of URLs, logs and public browser code. `usage.credits=None` means unconfirmed metering; browser time is billed separately. The explicit COM origin avoids changing existing SDK defaults.
+
+These examples use the existing credential setup flow described above.
