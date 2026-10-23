@@ -163,7 +163,7 @@ demo 输出页面标题、保存 `local_proxy_demo.png`，随后等待用户按�
 
 ## Browser Agent API（预览）
 
-配套 SDK：[PR](https://github.com/lexmount/lexmount-python-sdk/pull/118)，已验证提交 `b0270c23f9b763ebe1d1e535f6e498fbd06a7695`。请先在 SDK 源码目录切到该改动，再按下方方式安装。
+配套 SDK：[PR](https://github.com/lexmount/lexmount-python-sdk/pull/118)，已验证提交 `3d5b51c48c9b5298485a849efe0d938a4808db74`。请先在 SDK 源码目录切到该改动，再按下方方式安装。
 
 这些示例依赖配套 SDK 改动和已开启公共 API 的服务端；当前已发布版本尚不包含新接口。先安装本仓依赖，再执行 `pip install -e ../lexmount-python-sdk`，使用旁边的 SDK 源码目录。
 
@@ -184,3 +184,10 @@ python browser_agent_recovery.py
 基础/advanced 示例可用 `RUN_IDEMPOTENCY_KEY` 固定一次 Run 创建的键；保存 Agent 则用独立的 `AGENT_IDEMPOTENCY_KEY`。重跑 advanced 时需同时固定两个键，防止新 Agent ID 改变 Run 请求。不同业务创建使用不同键，跨进程恢复优先使用 recovery 示例。
 
 `RunWaitTimeout` 只停止本地等待，不会取消或重建任务；用已保存 ID 继续 GET/wait。API Key 不应放进 URL、日志或浏览器端代码。`usage.credits=null` 表示计量尚未确认，不能当成零费用。示例显式选择 COM origin，现有 SDK 默认站点保持兼容。凭据检查与浏览器登录沿用本仓已有流程。
+
+
+### Browser Agent 预览验证
+
+`browser-agent-preview` CI 会显式构建/安装固定提交的配套 SDK，再运行测试。仅安装当前 registry 依赖还不具备新 API；此 quickstart PR 保持 Draft，待 SDK 发版并将依赖升级到对应版本后再合并。
+
+恢复文件绑定原 Project ID 与 API origin，不保存 API Key。切换项目/服务、使用旧的无归属文件或丢失幂等键时，会在任何 Run 请求前拒绝继续；应核对原任务，不能通过删文件重跑来规避。POSIX 下 POST 前及回执重命名后均同步文件/目录。已有 Run ID 时只 GET/wait，不受创建幂等键七天窗口限制。

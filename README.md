@@ -170,7 +170,7 @@ Use an internal hostname or LAN IP for the target. Chrome has [implicit proxy by
 
 ## Browser Agent API (preview)
 
-Companion SDK: [PR](https://github.com/lexmount/lexmount-python-sdk/pull/118), tested commit `b0270c23f9b763ebe1d1e535f6e498fbd06a7695`. Check out that change before the local install below.
+Companion SDK: [PR](https://github.com/lexmount/lexmount-python-sdk/pull/118), tested commit `3d5b51c48c9b5298485a849efe0d938a4808db74`. Check out that change before the local install below.
 
 These examples require the companion Browser Agent SDK change; the current pinned SDK release does not include it yet. Install the normal requirements, then install the sibling SDK checkout into the same virtual environment: `pip install -e ../lexmount-python-sdk`. Use the API origin supplied for your deployment.
 
@@ -193,3 +193,10 @@ Set `RUN_IDEMPOTENCY_KEY` to reuse a Run create across retries, and a separate `
 Keep API keys out of URLs, logs and public browser code. `usage.credits=None` means unconfirmed metering; browser time is billed separately. The explicit COM origin avoids changing existing SDK defaults.
 
 These examples use the existing credential setup flow described above.
+
+
+### Browser Agent preview validation
+
+The `browser-agent-preview` CI workflow explicitly builds/installs the pinned companion SDK source before running tests. The registry dependency alone does not contain this API yet. Keep this quickstart PR in draft until the SDK is released and this repository's dependency is updated to that release.
+
+Recovery files bind the original Project ID and API origin, with no API key saved. Reusing a file in another project/service, using an old unscoped file or losing its idempotency key is rejected before any Run request. Reconcile the original task instead of deleting the file and rerunning. On POSIX, file contents and directory entries are synced before POST and after the receipt rename. A known Run ID uses GET/wait even after the seven-day create-key window.
