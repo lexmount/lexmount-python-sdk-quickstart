@@ -188,6 +188,6 @@ python browser_agent_recovery.py
 
 ### Browser Agent 预览验证
 
-`browser-agent-preview` CI 会显式构建/安装固定提交的配套 SDK，再运行测试。仅安装当前 registry 依赖还不具备新 API；此 quickstart PR 保持 Draft，待 SDK 发版并将依赖升级到对应版本后再合并。
+执行 `bash scripts/test-browser-agent-preview.sh ../lexmount-python-sdk`，显式安装配套源码并运行回归/类型检查。SDK 仓库为私有仓，不假定 CI 已有跨仓读取凭据。仅安装当前 registry 依赖还不具备新 API；此 quickstart PR 保持 Draft，待 SDK 发版并将依赖升级到对应版本后再合并。
 
 恢复文件绑定原 Project ID 与 API origin，不保存 API Key。切换项目/服务、使用旧的无归属文件或丢失幂等键时，会在任何 Run 请求前拒绝继续；应核对原任务，不能通过删文件重跑来规避。POSIX 下 POST 前及回执重命名后均同步文件/目录。已有 Run ID 时只 GET/wait，不受创建幂等键七天窗口限制。

@@ -197,6 +197,6 @@ These examples use the existing credential setup flow described above.
 
 ### Browser Agent preview validation
 
-The `browser-agent-preview` CI workflow explicitly builds/installs the pinned companion SDK source before running tests. The registry dependency alone does not contain this API yet. Keep this quickstart PR in draft until the SDK is released and this repository's dependency is updated to that release.
+Run `bash scripts/test-browser-agent-preview.sh ../lexmount-python-sdk` to install the companion checkout explicitly and run the regression/type checks. The SDK repository is private, so no cross-repository CI authentication is assumed. The registry dependency alone does not contain this API yet. Keep this quickstart PR in draft until the SDK is released and this repository's dependency is updated to that release.
 
 Recovery files bind the original Project ID and API origin, with no API key saved. Reusing a file in another project/service, using an old unscoped file or losing its idempotency key is rejected before any Run request. Reconcile the original task instead of deleting the file and rerunning. On POSIX, file contents and directory entries are synced before POST and after the receipt rename. A known Run ID uses GET/wait even after the seven-day create-key window.
