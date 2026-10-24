@@ -183,7 +183,7 @@ python browser_agent_recovery.py
 
 基础/advanced 示例可用 `RUN_IDEMPOTENCY_KEY` 固定一次 Run 创建的键；保存 Agent 则用独立的 `AGENT_IDEMPOTENCY_KEY`。重跑 advanced 时需同时固定两个键，防止新 Agent ID 改变 Run 请求。不同业务创建使用不同键，跨进程恢复优先使用 recovery 示例。
 
-`RunWaitTimeout` 只停止本地等待，不会取消或重建任务；用已保存 ID 继续 GET/wait。API Key 不应放进 URL、日志或浏览器端代码。`usage.credits=null` 表示计量尚未确认，不能当成零费用。示例显式选择 COM origin，现有 SDK 默认站点保持兼容。凭据检查与浏览器登录沿用本仓已有流程。
+`RunWaitTimeout` 只停止本地等待，不会取消或重建任务；用已保存 ID 继续 GET/wait。API Key 不应放进 URL、日志或浏览器端代码。`usage.credits=null` 表示计量尚未确认，不能当成零费用。SDK 与示例均默认使用 `https://api.lexmount.com`；仍可通过 `LEXMOUNT_BASE_URL` 显式选择 CN 或自定义环境。凭据检查与浏览器登录沿用本仓已有流程。
 
 
 ### Browser Agent 预览验证
