@@ -152,7 +152,7 @@ Run examples from this repository directory so they share the same `.env`.
 
 ## Access your company network with the local proxy
 
-`local_proxy_demo.py` uses SDK **0.6.0**, opens a separate local-network tunnel, then creates a normal cloud browser with that tunnel. Run it on the machine connected to your company network or VPN. Target DNS and TCP connections use this machine's network. The API environment and selected region must have the local proxy gateway deployed, and the project must have `custom_proxy` enabled.
+`local_proxy_demo.py` uses SDK **0.7.0**, opens a separate local-network tunnel, then creates a normal cloud browser with that tunnel. Run it on the machine connected to your company network or VPN. Target DNS and TCP connections use this machine's network. The API environment and selected region must have the local proxy gateway deployed, and the project must have `custom_proxy` enabled.
 
 After installing dependencies and setting credentials, run:
 
@@ -167,3 +167,35 @@ The target URL is required via `--url`. You can set optional `LEXMOUNT_REGION` i
 The demo prints the page title, saves `local_proxy_demo.png`, then waits for any key before closing the browser, cloud session, tunnel and client. The browser and local connector stay available while waiting; Ctrl+C also triggers cleanup. End-of-input allows noninteractive runs to finish. Sessions and tunnels are also closed when navigation fails. One client keeps the project, API key and region consistent.
 
 Use an internal hostname or LAN IP for the target. Chrome has [implicit proxy bypass rules](https://chromium.googlesource.com/chromium/src/+/HEAD/net/docs/proxy.md#implicit-bypass-rules) for localhost/loopback and link-local addresses, so `127.0.0.1` is not a reliable address for this demo. The cloud browser still needs its own website login and certificate trust.
+
+## Browser Agent API
+
+This repository pins **Lexmount SDK 0.7.0**, published on PyPI. Run `python -m pip install -r requirements.txt` to install it; a sibling SDK checkout is not required. The server must still have its public Browser Agent API enabled and the project configured for access.
+
+All new examples use the credential setup described above: existing credentials are reused; on local macOS/Windows terminals, missing credentials start browser sign-in and authorization, then save the returned Project ID and API key.
+
+```bash
+# Use the automatic sign-in flow above, or configure .env beforehand.
+export LEXMOUNT_BASE_URL='https://api.lexmount.com'
+python browser_agent.py
+python browser_agent_async.py
+python browser_agent_advanced.py
+python browser_agent_recovery.py
+```
+
+- Sync/async examples create a standard Run and wait; 201 means accepted. Task failure is a normal Run result.
+- The advanced example saves an Agent with a JSON Schema and `{{topic}}` variable, then reads native dictionary output and usage. The saved Agent remains available for reuse.
+- Recovery persists a business ID, exact request, idempotency key and Run ID in `browser-agent-job.json` (mode 0600). Rerun with the same file to recover. A lost response uses the original key; a known Run uses GET/wait. An unknown receipt older than 7 days requires reconciliation before a new POST.
+
+Set `RUN_IDEMPOTENCY_KEY` to reuse a Run create across retries, and a separate `AGENT_IDEMPOTENCY_KEY` for Agent creation. Repeating the advanced example requires both keys so the Agent ID in the Run request stays unchanged. Prefer the recovery example for process restarts. Separate independent creates need separate keys. SDK retries within one method call reuse its key. `RunWaitTimeout` only stops local waiting; it does not cancel or recreate the Run.
+
+Keep API keys out of URLs, logs and public browser code. `usage.credits=None` means unconfirmed metering; browser time is billed separately. The SDK and these examples default to `https://api.lexmount.com`; an explicit `LEXMOUNT_BASE_URL` still selects CN or a custom environment.
+
+These examples use the existing credential setup flow described above.
+
+
+### Browser Agent installation and regression checks
+
+Activate a disposable Python virtual environment, then run `bash scripts/test-browser-agent.sh` in a clean checkout. It installs the declared `0.7.0` package from PyPI and checks credential setup, recovery and Python syntax without a sibling SDK checkout. These checks use local mocks and do not create real Agents or Runs.
+
+Recovery files bind the original Project ID and API origin, with no API key saved. Reusing a file in another project/service, using an old unscoped file or losing its idempotency key is rejected before any Run request. Reconcile the original task instead of deleting the file and rerunning. On POSIX, file contents and directory entries are synced before POST and after the receipt rename. A known Run ID uses GET/wait even after the seven-day create-key window.

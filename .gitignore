@@ -34,3 +34,7 @@ links0.txt
 
 # Temporary credential files used by atomic .env updates
 .env.*.tmp
+
+# Browser Agent recovery records (business data; no API keys)
+browser-agent-job.json
+browser-agent-job.json.*.tmp

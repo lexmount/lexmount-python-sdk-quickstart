@@ -145,7 +145,7 @@ python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 
 ## 通过本地代理访问公司内网
 
-`local_proxy_demo.py` 使用 SDK **0.6.0**，先打开独立的本地网络隧道，再创建使用该隧道的 normal 云浏览器。请在已接入公司网络或 VPN 的机器上运行；目标域名解析和 TCP 连接由这台机器完成。API 环境和所选区域需要部署本地代理网关，项目需要启用 `custom_proxy`。
+`local_proxy_demo.py` 使用 SDK **0.7.0**，先打开独立的本地网络隧道，再创建使用该隧道的 normal 云浏览器。请在已接入公司网络或 VPN 的机器上运行；目标域名解析和 TCP 连接由这台机器完成。API 环境和所选区域需要部署本地代理网关，项目需要启用 `custom_proxy`。
 
 安装依赖并配置凭据后运行：
 
@@ -160,3 +160,33 @@ python3 local_proxy_demo.py --url http://oa.company.internal/ --region <region-i
 demo 输出页面标题、保存 `local_proxy_demo.png`，随后等待用户按任意键，再关闭浏览器、云端会话、隧道和客户端。等待期间浏览器和本地隧道保持可用；Ctrl+C 也会触发清理。非交互运行遇到输入结束时直接清理。导航失败时也会清理会话与隧道。整个流程使用同一个客户端，保持 Project ID、API Key 和区域一致。
 
 目标请使用内网域名或局域网 IP。Chrome 对 localhost、回环及链路本地地址有[默认绕过代理规则](https://chromium.googlesource.com/chromium/src/+/HEAD/net/docs/proxy.md#implicit-bypass-rules)，因此不要用 `127.0.0.1` 作为本示例的目标地址。网站登录状态和证书信任仍由云浏览器自行处理。
+
+## Browser Agent API
+
+本仓依赖固定为已发布到 PyPI 的 **Lexmount SDK 0.7.0**，执行 `python -m pip install -r requirements.txt` 即可安装，无需 SDK 源码目录。服务端仍需开启公共 Browser Agent API，并为项目配置访问权限。
+
+新增用例沿用上面的凭据初始化流程：已有配置直接使用；本地 macOS/Windows 缺少凭据时，浏览器登录授权后自动获取并保存 Project ID 和 API Key。
+
+```bash
+# 凭据通过上面的自动登录流程配置；也可事先填写 .env。
+export LEXMOUNT_BASE_URL='https://api.lexmount.com'
+python browser_agent.py
+python browser_agent_async.py
+python browser_agent_advanced.py
+python browser_agent_recovery.py
+```
+
+- 基础示例创建标准 Run 并等待；201 只表示已受理。任务失败仍正常返回 Run。
+- advanced 示例保存带 `{{topic}}` 变量和 JSON Schema 的 Agent，读取原生对象结果和 usage；Agent 保留供后续复用。
+- recovery 示例在 POST 前保存业务 ID、原始请求和幂等键，收到回执后保存 Run ID。使用同一文件重跑即可恢复；丢失回执时重用原键和请求，已有 Run ID 时仅 GET/wait。未确认回执超过七天后先核对原请求，不要自动创建新任务。
+
+基础/advanced 示例可用 `RUN_IDEMPOTENCY_KEY` 固定一次 Run 创建的键；保存 Agent 则用独立的 `AGENT_IDEMPOTENCY_KEY`。重跑 advanced 时需同时固定两个键，防止新 Agent ID 改变 Run 请求。不同业务创建使用不同键，跨进程恢复优先使用 recovery 示例。
+
+`RunWaitTimeout` 只停止本地等待，不会取消或重建任务；用已保存 ID 继续 GET/wait。API Key 不应放进 URL、日志或浏览器端代码。`usage.credits=null` 表示计量尚未确认，不能当成零费用。SDK 与示例均默认使用 `https://api.lexmount.com`；仍可通过 `LEXMOUNT_BASE_URL` 显式选择 CN 或自定义环境。凭据检查与浏览器登录沿用本仓已有流程。
+
+
+### Browser Agent 安装与回归验证
+
+在干净的项目目录中先激活独立 Python 虚拟环境，再执行 `bash scripts/test-browser-agent.sh`，从 PyPI 安装声明的 `0.7.0` 依赖并运行认证、恢复及语法检查，不依赖旁边的 SDK 源码。测试使用本地模拟，不会创建真实 Agent 或 Run。
+
+恢复文件绑定原 Project ID 与 API origin，不保存 API Key。切换项目/服务、使用旧的无归属文件或丢失幂等键时，会在任何 Run 请求前拒绝继续；应核对原任务，不能通过删文件重跑来规避。POSIX 下 POST 前及回执重命名后均同步文件/目录。已有 Run ID 时只 GET/wait，不受创建幂等键七天窗口限制。
