@@ -1,5 +1,5 @@
 # Lexmount SDK
-lexmount==0.6.0
+lexmount==0.7.0
 
 # Browser automation
 playwright>=1.40.0
