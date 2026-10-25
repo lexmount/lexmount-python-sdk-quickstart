@@ -25,6 +25,7 @@ SITES = {
     "https://api.lexmount.cn": "https://browser.lexmount.cn",
 }
 CREDENTIAL_KEYS = ("LEXMOUNT_PROJECT_ID", "LEXMOUNT_API_KEY", "LEXMOUNT_BASE_URL")
+USER_AGENT = "Lexmount-Python-Quickstart/1.0"
 
 
 class SetupError(Exception):
@@ -54,7 +55,8 @@ class _NoRedirect(HTTPRedirectHandler):
 
 def _exchange_code(url, payload):
     request = Request(url, data=json.dumps(payload).encode("utf-8"), method="POST",
-                      headers={"Content-Type": "application/json", "Accept": "application/json"})
+                      headers={"Content-Type": "application/json", "Accept": "application/json",
+                               "User-Agent": USER_AGENT})
     with build_opener(_NoRedirect).open(request, timeout=15) as response:
         raw = response.read(65537)
         if len(raw) > 65536:
@@ -234,12 +236,18 @@ def ensure_credentials(*, env_file=None, env=None, browser_available=None, login
     print("Lexmount credentials are missing. Opening your browser to sign in and authorize (up to 3 minutes).")
     try:
         credentials = (login or authorize)(site, base_url)
-        save_credentials(file, original, credentials)
-        env.update({"LEXMOUNT_PROJECT_ID": credentials["project_id"], "LEXMOUNT_API_KEY": credentials["api_key"],
-                    "LEXMOUNT_BASE_URL": credentials["api_base_url"].rstrip("/")})
     except (Exception, KeyboardInterrupt):
         # Do not include raw HTTP errors, callback URLs, API keys or server responses.
-        raise SetupError(f"Browser authorization or saving .env failed. No demo requests were started.\n{manual}") from None
+        raise SetupError(
+            f"Browser authorization or credential exchange failed. No demo requests were started.\n{manual}"
+        ) from None
+    try:
+        save_credentials(file, original, credentials)
+    except (Exception, KeyboardInterrupt):
+        # Do not include raw HTTP errors, callback URLs, API keys or server responses.
+        raise SetupError(f"Saving .env failed. No demo requests were started.\n{manual}") from None
+    env.update({"LEXMOUNT_PROJECT_ID": credentials["project_id"], "LEXMOUNT_API_KEY": credentials["api_key"],
+                "LEXMOUNT_BASE_URL": credentials["api_base_url"].rstrip("/")})
     print("Lexmount credentials saved to .env. Continuing the demo.")
 
 

@@ -8,6 +8,7 @@ import sys
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from io import StringIO
 from urllib.error import HTTPError, URLError
@@ -132,7 +133,8 @@ class AuthTests(unittest.TestCase):
         captured = []
         class Handler(BaseHTTPRequestHandler):
             def do_POST(self):
-                captured.append((self.path, json.loads(self.rfile.read(int(self.headers['Content-Length'])))))
+                captured.append((self.path, json.loads(self.rfile.read(int(self.headers['Content-Length']))),
+                                 self.headers.get('User-Agent')))
                 data = json.dumps(CREDENTIALS).encode()
                 self.send_response(200)
                 self.send_header('Content-Length', str(len(data)))
@@ -149,6 +151,7 @@ class AuthTests(unittest.TestCase):
             self.assertEqual(result, CREDENTIALS)
             self.assertEqual(captured[0][0], '/api/connect/codex/exchange')
             self.assertEqual(captured[0][1]['code'], 'good')
+            self.assertEqual(captured[0][2], auth.USER_AGENT)
         finally:
             server.shutdown()
             server.server_close()
@@ -180,9 +183,21 @@ class AuthTests(unittest.TestCase):
             raise RuntimeError('sensitive-response-MUST-NOT-LEAK')
         with self.assertRaises(auth.SetupError) as error:
             auth.ensure_credentials(env_file=self.file, env=env, browser_available=lambda: True, login=fail)
+        self.assertIn('authorization or credential exchange failed', str(error.exception))
         self.assertNotIn('sensitive-response', str(error.exception))
         self.assertEqual(self.file.read_text(), '# changed\n')
         self.assertEqual(env['LEXMOUNT_PROJECT_ID'], 'partial')
+
+    def test_save_failure_reports_save_phase_without_updating_environment(self):
+        env = {}
+        with patch.object(auth, 'save_credentials', side_effect=OSError('sensitive-path-MUST-NOT-LEAK')):
+            with self.assertRaises(auth.SetupError) as error:
+                auth.ensure_credentials(env_file=self.file, env=env, browser_available=lambda: True,
+                                        login=lambda *_: CREDENTIALS)
+        self.assertIn('Saving .env failed', str(error.exception))
+        self.assertNotIn('sensitive-path', str(error.exception))
+        self.assertNotIn('LEXMOUNT_PROJECT_ID', env)
+        self.assertFalse(self.file.exists())
 
     def test_cn_and_custom_environment(self):
         def login(site, base):
