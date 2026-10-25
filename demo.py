@@ -1,4 +1,5 @@
 import argparse
+import os
 from typing import Optional
 
 from quickstart_auth import load_environment, prepare_demo
@@ -14,6 +15,13 @@ def build_client(region: Optional[str]) -> Lexmount:
     return Lexmount()
 
 
+def target_site() -> str:
+    base_url = os.environ.get("LEXMOUNT_BASE_URL", "").rstrip("/")
+    if base_url == "https://api.lexmount.cn":
+        return "https://browser.lexmount.cn/"
+    return "https://browser.lexmount.com/"
+
+
 def run(playwright: Playwright, region: Optional[str] = None) -> None:
     lm = build_client(region)
 
@@ -23,9 +31,9 @@ def run(playwright: Playwright, region: Optional[str] = None) -> None:
         context = browser.contexts[0]
         page = context.pages[0]
 
-        page.goto("https://browser.lexmount.cn/")
+        page.goto(target_site(), wait_until="domcontentloaded")
         page_title = page.title()
-        assert "Lexmount Browser" in page_title, f"Unexpected page title: {page_title}"
+        assert "Lexmount" in page_title, f"Unexpected page title: {page_title}"
         page.screenshot(path="screenshot.png")
         input("Press Enter to continue....")
 
