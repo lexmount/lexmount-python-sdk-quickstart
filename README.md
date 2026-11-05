@@ -199,3 +199,22 @@ These examples use the existing credential setup flow described above.
 Activate a disposable Python virtual environment, then run `bash scripts/test-browser-agent.sh` in a clean checkout. It installs the declared `0.7.0` package from PyPI and checks credential setup, recovery and Python syntax without a sibling SDK checkout. These checks use local mocks and do not create real Agents or Runs.
 
 Recovery files bind the original Project ID and API origin, with no API key saved. Reusing a file in another project/service, using an old unscoped file or losing its idempotency key is rejected before any Run request. Reconcile the original task instead of deleting the file and rerunning. On POSIX, file contents and directory entries are synced before POST and after the receipt rename. A known Run ID uses GET/wait even after the seven-day create-key window.
+
+## Quota usage queries
+
+Query current usage and the past 365 days of quota periods, without creating a browser session. Prints real response metadata/data and preserves null usage outside retention. Keep output private if it contains project usage information.
+
+The repository currently pins SDK 0.7.0; the published version does not necessarily include usage. Until the usage-enabled SDK release is published, use the checkout of SDK PR121 with the changes applied (sibling directory shown below). Do not assume a fresh default dependency install enables this example. No package publication is performed by these commands.
+
+```sh
+python -m pip install -e ../lexmount-python-sdk
+```
+
+Set the final HTTPS API origin, without a path, for an environment with the usage API deployed. SDK usage requests do not follow HTTP 307 redirects; unlike curl -L, configure the destination directly. Never print API keys. Counts use milliseconds, request counts and bytes. Shared Free quotas may include associated projects; history is retained/reset-adjusted usage, not an immutable invoice.
+
+```sh
+export LEXMOUNT_API_KEY="YOUR_API_KEY"
+export LEXMOUNT_PROJECT_ID="YOUR_PROJECT_ID"
+export LEXMOUNT_BASE_URL="https://api.lexmount.com"
+python usage_demo.py
+```

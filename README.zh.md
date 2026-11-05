@@ -190,3 +190,22 @@ python browser_agent_recovery.py
 在干净的项目目录中先激活独立 Python 虚拟环境，再执行 `bash scripts/test-browser-agent.sh`，从 PyPI 安装声明的 `0.7.0` 依赖并运行认证、恢复及语法检查，不依赖旁边的 SDK 源码。测试使用本地模拟，不会创建真实 Agent 或 Run。
 
 恢复文件绑定原 Project ID 与 API origin，不保存 API Key。切换项目/服务、使用旧的无归属文件或丢失幂等键时，会在任何 Run 请求前拒绝继续；应核对原任务，不能通过删文件重跑来规避。POSIX 下 POST 前及回执重命名后均同步文件/目录。已有 Run ID 时只 GET/wait，不受创建幂等键七天窗口限制。
+
+## 用量查询示例
+
+查询当前用量与近 365 天的配额周期，不创建浏览器 session。打印真实响应元信息与数据，保留超出保留范围的 null 用量；输出包含项目用量信息，请妥善保存。
+
+仓库当前固定 SDK 0.7.0，已发布版本不一定包含 usage。在新版 SDK 发布前，使用包含 SDK PR121 改动的源码目录（下面按相邻目录举例）。默认安装依赖不代表此示例已经可用；以下命令只本地安装，不发布包。
+
+```sh
+python -m pip install -e ../lexmount-python-sdk
+```
+
+填写已经部署用量接口的最终 HTTPS API origin，不带路径。SDK 用量请求不会跟随 HTTP 307 重定向，与 curl -L 不同，需要直接配置目标地址。不要打印 API Key。计数单位为毫秒、次数、字节；Free 共享配额可能包含关联项目，历史用量为保留且按重置调整的数据，不是不可变账单。
+
+```sh
+export LEXMOUNT_API_KEY="YOUR_API_KEY"
+export LEXMOUNT_PROJECT_ID="YOUR_PROJECT_ID"
+export LEXMOUNT_BASE_URL="https://api.lexmount.com"
+python usage_demo.py
+```
