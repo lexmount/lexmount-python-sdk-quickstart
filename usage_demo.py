@@ -1,8 +1,7 @@
-"""Read current quota and retained history without creating browser sessions."""
+"""Read current-period WebFetch usage without creating browser sessions."""
 import json
 import os
 import sys
-import time
 from dataclasses import asdict
 
 from dotenv import load_dotenv
@@ -30,12 +29,6 @@ def main():
         current = client.usage.current(with_response=True)
         print(json.dumps({"endpoint": "current", "request_id": current.request_id,
                           "status_code": current.status_code, "data": asdict(current.data)}, indent=2))
-        time.sleep(1.1)
-        history = client.usage.history(with_response=True)
-        print(json.dumps({"endpoint": "history", "request_id": history.request_id,
-                          "status_code": history.status_code, "data": asdict(history.data)}, indent=2))
-        unavailable = sum(period.usage is None for period in history.data.periods)
-        print(f"Periods outside retention: {unavailable} (null usage is not zero).")
 
 
 if __name__ == "__main__":
