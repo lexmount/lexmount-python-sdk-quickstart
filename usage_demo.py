@@ -5,23 +5,16 @@ import sys
 import time
 from dataclasses import asdict
 
-from dotenv import load_dotenv
+from quickstart_auth import ensure_credentials
 from lexmount import Lexmount
 
 
-def required(name):
-    value = os.environ.get(name)
-    if not value:
-        raise ValueError(f"Set {name} before running this example.")
-    return value
-
-
 def main():
-    load_dotenv()
+    ensure_credentials()
     with Lexmount(
-        api_key=required("LEXMOUNT_API_KEY"),
-        project_id=required("LEXMOUNT_PROJECT_ID"),
-        base_url=required("LEXMOUNT_BASE_URL"),
+        api_key=os.environ["LEXMOUNT_API_KEY"],
+        project_id=os.environ["LEXMOUNT_PROJECT_ID"],
+        base_url=os.getenv("LEXMOUNT_BASE_URL", "https://api.lexmount.com"),
     ) as client:
         if not hasattr(client, "usage"):
             raise RuntimeError(

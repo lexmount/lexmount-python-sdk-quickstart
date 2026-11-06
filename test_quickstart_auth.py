@@ -231,7 +231,7 @@ class AuthTests(unittest.TestCase):
                 result = subprocess.run([sys.executable, '-c', runner, str(repo), str(demo), *args],
                                         cwd=self.temp.name, env=env, input='', capture_output=True, text=True, timeout=10)
                 self.assertNotEqual(result.returncode, 0)
-                self.assertIn('Set LEXMOUNT_API_KEY' if demo.name == 'usage_demo.py' else 'Lexmount credentials are missing', result.stderr)
+                self.assertIn('Lexmount credentials are missing', result.stderr)
                 self.assertNotIn('unexpected network', result.stderr)
 
 
