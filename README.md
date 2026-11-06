@@ -202,7 +202,7 @@ Recovery files bind the original Project ID and API origin, with no API key save
 
 ## Quota usage queries
 
-Query current-period WebFetch request count, base allowance and remaining allowance, without creating a browser session. Prints response metadata and data. Keep output private if it contains project usage information.
+Query current-period WebFetch allowance and the past 365 days of WebFetch quota periods, without creating a browser session. Prints response metadata and data. Keep output private if it contains project usage information.
 
 The repository currently pins SDK 0.7.0; the published version does not necessarily include usage. Until the usage-enabled SDK release is published, use the checkout of SDK PR121 with the changes applied (sibling directory shown below). Do not assume a fresh default dependency install enables this example. No package publication is performed by these commands.
 
@@ -210,7 +210,7 @@ The repository currently pins SDK 0.7.0; the published version does not necessar
 python -m pip install -e ../lexmount-python-sdk
 ```
 
-Set the final HTTPS API origin, without a path, for an environment with the usage API deployed. SDK usage requests do not follow HTTP 307 redirects; unlike curl -L, configure the destination directly. Never print API keys. Counts are WebFetch requests. Shared Free quotas may include associated projects; remaining allowance includes eligible purchased credits. History, browser duration and proxy traffic are not exposed.
+Set the final HTTPS API origin, without a path, for an environment with the usage API deployed. SDK usage requests do not follow HTTP 307 redirects; unlike curl -L, configure the destination directly. Never print API keys. Counts are WebFetch requests. Shared Free quotas may include associated projects; remaining allowance includes eligible purchased credits. History contains only WebFetch counts; outside-retention periods have null usage. First historical queries may return 503 while daily summaries are prepared in the background; retry later. Browser duration and proxy traffic are not exposed.
 
 ```sh
 export LEXMOUNT_API_KEY="YOUR_API_KEY"

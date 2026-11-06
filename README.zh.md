@@ -193,7 +193,7 @@ python browser_agent_recovery.py
 
 ## 用量查询示例
 
-查询当前配额周期的 WebFetch 已用次数、基础额度及剩余次数，不创建浏览器 session。打印响应元信息与数据；输出包含项目用量信息，请妥善保存。
+查询当前配额周期的 WebFetch 已用次数、基础额度及剩余次数，并查询近一年历史周期的 WebFetch 次数，不创建浏览器 session。打印响应元信息与数据；输出包含项目用量信息，请妥善保存。
 
 仓库当前固定 SDK 0.7.0，已发布版本不一定包含 usage。在新版 SDK 发布前，使用包含 SDK PR121 改动的源码目录（下面按相邻目录举例）。默认安装依赖不代表此示例已经可用；以下命令只本地安装，不发布包。
 
@@ -201,7 +201,7 @@ python browser_agent_recovery.py
 python -m pip install -e ../lexmount-python-sdk
 ```
 
-填写已经部署用量接口的最终 HTTPS API origin，不带路径。SDK 用量请求不会跟随 HTTP 307 重定向，与 curl -L 不同，需要直接配置目标地址。不要打印 API Key。计数单位为 WebFetch 次数；Free 共享配额可能包含关联项目，剩余额度包含适用的充值余额。不提供历史查询、浏览器时长或代理流量。
+填写已经部署用量接口的最终 HTTPS API origin，不带路径。SDK 用量请求不会跟随 HTTP 307 重定向，与 curl -L 不同，需要直接配置目标地址。不要打印 API Key。计数单位为 WebFetch 次数；Free 共享配额可能包含关联项目，剩余额度包含适用的充值余额。历史周期只含 WebFetch 次数；超出保留范围为 null。首次历史查询可能因后台补算返回 503，稍后重试。不提供浏览器时长或代理流量。
 
 ```sh
 export LEXMOUNT_API_KEY="YOUR_API_KEY"
