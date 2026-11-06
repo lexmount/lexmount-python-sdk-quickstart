@@ -204,6 +204,8 @@ Recovery files bind the original Project ID and API origin, with no API key save
 
 ## Quota usage queries
 
+Credential setup matches the other demos: reuse valid Project ID/API Key from `.env` or the environment; otherwise, on a supported local desktop, open the PKCE browser authorization flow, exchange for credentials, save them to `.env`, and continue current/history queries. The default API is `https://api.lexmount.com`. Headless/CI environments stop with setup instructions before any usage request.
+
 Query current-period WebFetch allowance and the past 365 days of WebFetch quota periods, without creating a browser session. Prints response metadata and data. Keep output private if it contains project usage information.
 
 This repository pins the SDK 0.8.1, including current and historical WebFetch usage. Install directly from the package registry; no SDK source checkout is required.
@@ -212,11 +214,8 @@ This repository pins the SDK 0.8.1, including current and historical WebFetch us
 python -m pip install -r requirements.txt
 ```
 
-Set the final HTTPS API origin, without a path, for an environment with the usage API deployed. SDK usage requests do not follow HTTP 307 redirects; unlike curl -L, configure the destination directly. Never print API keys. Counts are WebFetch requests. Shared Free quotas may include associated projects; remaining allowance includes eligible purchased credits. History contains only WebFetch counts; outside-retention periods have null usage. First historical queries may return 503 while daily summaries are prepared in the background; retry later. Browser duration and proxy traffic are not exposed.
+The default API origin is https://api.lexmount.com. For another environment, configure its final HTTPS API origin without a path. SDK usage requests do not follow HTTP 307 redirects; unlike curl -L, configure the destination directly. Never print API keys. Counts are WebFetch requests. Shared Free quotas may include associated projects; remaining allowance includes eligible purchased credits. History contains only WebFetch counts; outside-retention periods have null usage. First historical queries may return 503 while daily summaries are prepared in the background; retry later. Browser duration and proxy traffic are not exposed.
 
 ```sh
-export LEXMOUNT_API_KEY="YOUR_API_KEY"
-export LEXMOUNT_PROJECT_ID="YOUR_PROJECT_ID"
-export LEXMOUNT_BASE_URL="https://api.lexmount.com"
 python usage_demo.py
 ```

@@ -195,6 +195,8 @@ python browser_agent_recovery.py
 
 ## 用量查询示例
 
+凭据初始化与其他示例一致：已有 `.env` 或环境变量中的有效 Project ID/API Key 时直接使用；缺少凭据时，在支持浏览器登录的本地环境自动发起 PKCE 授权，换取 Project ID 和 API Key，保存到 `.env` 后继续 current/history 查询。默认 API 为 `https://api.lexmount.com`。无浏览器/CI 环境会在用量请求前提示配置凭据。
+
 查询当前配额周期的 WebFetch 已用次数、基础额度及剩余次数，并查询近一年历史周期的 WebFetch 次数，不创建浏览器 session。打印响应元信息与数据；输出包含项目用量信息，请妥善保存。
 
 仓库固定 SDK 0.8.1，包含当前和历史 WebFetch 用量接口。直接从包仓库安装，无需 SDK 源码目录。
@@ -203,11 +205,8 @@ python browser_agent_recovery.py
 python -m pip install -r requirements.txt
 ```
 
-填写已经部署用量接口的最终 HTTPS API origin，不带路径。SDK 用量请求不会跟随 HTTP 307 重定向，与 curl -L 不同，需要直接配置目标地址。不要打印 API Key。计数单位为 WebFetch 次数；Free 共享配额可能包含关联项目，剩余额度包含适用的充值余额。历史周期只含 WebFetch 次数；超出保留范围为 null。首次历史查询可能因后台补算返回 503，稍后重试。不提供浏览器时长或代理流量。
+默认 API 为 https://api.lexmount.com；其他环境请配置已部署用量接口的最终 HTTPS API origin，不带路径。SDK 用量请求不会跟随 HTTP 307 重定向，与 curl -L 不同，需要直接配置目标地址。不要打印 API Key。计数单位为 WebFetch 次数；Free 共享配额可能包含关联项目，剩余额度包含适用的充值余额。历史周期只含 WebFetch 次数；超出保留范围为 null。首次历史查询可能因后台补算返回 503，稍后重试。不提供浏览器时长或代理流量。
 
 ```sh
-export LEXMOUNT_API_KEY="YOUR_API_KEY"
-export LEXMOUNT_PROJECT_ID="YOUR_PROJECT_ID"
-export LEXMOUNT_BASE_URL="https://api.lexmount.com"
 python usage_demo.py
 ```
