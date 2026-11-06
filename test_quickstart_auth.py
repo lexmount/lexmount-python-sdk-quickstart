@@ -213,7 +213,7 @@ class AuthTests(unittest.TestCase):
     def test_every_demo_stops_before_network_when_headless(self):
         repo = Path(__file__).parent
         demos = [file for file in repo.glob('*.py') if not file.name.startswith('test_') and file.name not in ('quickstart_auth.py', 'browser_agent_common.py')]
-        self.assertEqual(len(demos), 24)
+        self.assertEqual(len(demos), 25)
         env = {key: value for key, value in os.environ.items() if not key.startswith('LEXMOUNT_')}
         env['CI'] = '1'
         for demo in demos:
@@ -231,7 +231,7 @@ class AuthTests(unittest.TestCase):
                 result = subprocess.run([sys.executable, '-c', runner, str(repo), str(demo), *args],
                                         cwd=self.temp.name, env=env, input='', capture_output=True, text=True, timeout=10)
                 self.assertNotEqual(result.returncode, 0)
-                self.assertIn('Lexmount credentials are missing', result.stderr)
+                self.assertIn('Set LEXMOUNT_API_KEY' if demo.name == 'usage_demo.py' else 'Lexmount credentials are missing', result.stderr)
                 self.assertNotIn('unexpected network', result.stderr)
 
 
