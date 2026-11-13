@@ -213,7 +213,7 @@ class AuthTests(unittest.TestCase):
     def test_every_demo_stops_before_network_when_headless(self):
         repo = Path(__file__).parent
         demos = [file for file in repo.glob('*.py') if not file.name.startswith('test_') and file.name not in ('quickstart_auth.py', 'browser_agent_common.py')]
-        self.assertEqual(len(demos), 25)
+        self.assertEqual(len(demos), 26)
         env = {key: value for key, value in os.environ.items() if not key.startswith('LEXMOUNT_')}
         env['CI'] = '1'
         for demo in demos:
@@ -223,6 +223,8 @@ class AuthTests(unittest.TestCase):
                     args = ['--url', 'http://oa.example.test/']
                 if demo.name == 'custom_image_demo.py':
                     args = ['--custom_image_id', 'test-image']
+                if demo.name == 'session_replay.py':
+                    args = ['--session-id', 'test-session']
                 # Fail on any unexpected network access, even if an entry point missed bootstrap.
                 runner = ('import runpy,sys; from unittest.mock import patch; '
                           'sys.path.insert(0, sys.argv[1]); del sys.argv[1]; '

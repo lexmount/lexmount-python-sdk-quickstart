@@ -1,12 +1,26 @@
 # lexmount-python-sdk-quickstart
 
-> Release dependency: install after SDK 0.8.1 is published to npm/PyPI. This version fixes responses whose gateway and service request IDs differ.
+> Release dependency: install after SDK 0.9.0 is published to PyPI. Replay lookup requires the replay-enabled backend ([backend PR #654](https://github.com/lexmount/lexmount-nodejs-backend/pull/654)).
 
 > 🇨🇳 [中文版](./README.zh.md)
 
 Quick start examples for Lexmount Python SDK.
 
 ---
+
+## Query a session's Replay URL (SDK 0.9.0)
+
+```bash
+python session_replay.py --session-id SESSION_ID
+# Select a recorded tab:
+python session_replay.py --session-id SESSION_ID --tab-id TAB_ID
+```
+
+The demo queries an existing session once and prints its replay status, video URL and recorded tabs. It does not create or close a browser. Use the same project and API credentials as the session; the existing `.env`/PKCE bootstrap applies. Set `LEXMOUNT_BASE_URL` to the matching API environment. The session must have persistent recording enabled when created; closed sessions remain queryable while their history exists.
+
+For just the first playable MP4 URL, use `client.sessions.get_replay_url(session_id)`. `get_replay()` also returns metadata for every tab. A `null` URL while recording or processing is normal: close the recorded session when finished and rerun later. `failed` and `disabled` do not produce a URL; authentication or missing-session errors exit with a nonzero status. `--tab-id` selects a returned tab and reports an error if that ID is absent.
+
+These are video URLs, not console page links. Signed URLs expire; query again for a fresh URL, and do not publish them in logs or issue reports. There is no indefinite polling or session mutation in this example.
 
 ## 📋 Examples
 
@@ -138,7 +152,6 @@ python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 python3 session_downloads.py # Session downloads demo
 ```
 
-
 ## Credentials and browser sign-in
 
 Every demo checks `LEXMOUNT_PROJECT_ID` and `LEXMOUNT_API_KEY` before making API requests. It loads `.env` from the **current working directory**, with `.env` taking precedence over exported environment variables. Empty values and the example placeholders count as missing. Existing complete credentials are used without opening a browser.
@@ -154,7 +167,7 @@ Run examples from this repository directory so they share the same `.env`.
 
 ## Access your company network with the local proxy
 
-`local_proxy_demo.py` uses SDK **0.8.1**, opens a separate local-network tunnel, then creates a normal cloud browser with that tunnel. Run it on the machine connected to your company network or VPN. Target DNS and TCP connections use this machine's network. The API environment and selected region must have the local proxy gateway deployed, and the project must have `custom_proxy` enabled.
+`local_proxy_demo.py` uses SDK **0.9.0**, opens a separate local-network tunnel, then creates a normal cloud browser with that tunnel. Run it on the machine connected to your company network or VPN. Target DNS and TCP connections use this machine's network. The API environment and selected region must have the local proxy gateway deployed, and the project must have `custom_proxy` enabled.
 
 After installing dependencies and setting credentials, run:
 
@@ -172,7 +185,7 @@ Use an internal hostname or LAN IP for the target. Chrome has [implicit proxy by
 
 ## Browser Agent API
 
-This repository pins **Lexmount SDK 0.8.1**. Run `python -m pip install -r requirements.txt` to install it; a sibling SDK checkout is not required. The server must still have its public Browser Agent API enabled and the project configured for access.
+This repository pins **Lexmount SDK 0.9.0**. Run `python -m pip install -r requirements.txt` to install it; a sibling SDK checkout is not required. The server must still have its public Browser Agent API enabled and the project configured for access.
 
 All new examples use the credential setup described above: existing credentials are reused; on local macOS/Windows terminals, missing credentials start browser sign-in and authorization, then save the returned Project ID and API key.
 
@@ -195,10 +208,9 @@ Keep API keys out of URLs, logs and public browser code. `usage.credits=None` me
 
 These examples use the existing credential setup flow described above.
 
-
 ### Browser Agent installation and regression checks
 
-Activate a disposable Python virtual environment, then run `bash scripts/test-browser-agent.sh` in a clean checkout. It installs the declared `0.8.1` package from PyPI and checks credential setup, recovery and Python syntax without a sibling SDK checkout. These checks use local mocks and do not create real Agents or Runs.
+Activate a disposable Python virtual environment, then run `bash scripts/test-browser-agent.sh` in a clean checkout. It installs the declared `0.9.0` package from PyPI and checks credential setup, recovery and Python syntax without a sibling SDK checkout. These checks use local mocks and do not create real Agents or Runs.
 
 Recovery files bind the original Project ID and API origin, with no API key saved. Reusing a file in another project/service, using an old unscoped file or losing its idempotency key is rejected before any Run request. Reconcile the original task instead of deleting the file and rerunning. On POSIX, file contents and directory entries are synced before POST and after the receipt rename. A known Run ID uses GET/wait even after the seven-day create-key window.
 
@@ -208,7 +220,7 @@ Credential setup matches the other demos: reuse valid Project ID/API Key from `.
 
 Query current-period WebFetch allowance and the past 365 days of WebFetch quota periods, without creating a browser session. Prints response metadata and data. Keep output private if it contains project usage information.
 
-This repository pins the SDK 0.8.1, including current and historical WebFetch usage. Install directly from the package registry; no SDK source checkout is required.
+This repository pins the SDK 0.9.0, including current and historical WebFetch usage. Install directly from the package registry; no SDK source checkout is required.
 
 ```sh
 python -m pip install -r requirements.txt

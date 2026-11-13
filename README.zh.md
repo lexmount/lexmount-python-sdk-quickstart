@@ -1,12 +1,26 @@
 # lexmount-python-sdk-quickstart
 
-> 发布依赖：请在 SDK 0.8.1 发布到 npm/PyPI 后安装。此版本修复网关和服务请求 ID 不同导致的响应校验失败。
+> 发布依赖：请在 SDK 0.9.0 发布到 PyPI 后安装。回放查询需要部署支持该功能的后端（[backend PR #654](https://github.com/lexmount/lexmount-nodejs-backend/pull/654)）。
 
 > 🇬🇧 [English](./README.md)
 
 快速开始使用 Lexmount Python SDK 的示例项目。
 
 ---
+
+## 按 Session ID 查询回放链接（SDK 0.9.0）
+
+```bash
+python session_replay.py --session-id SESSION_ID
+# 指定录制标签页：
+python session_replay.py --session-id SESSION_ID --tab-id TAB_ID
+```
+
+示例只查询一次已有会话，输出回放状态、视频链接和标签页列表，不创建或关闭浏览器。使用创建会话时相同的项目和 API 凭据，沿用 `.env` / PKCE 登录流程；`LEXMOUNT_BASE_URL` 应指向对应 API 环境。创建会话时必须已开启持久录制；关闭后的会话在历史记录保留期间仍可查询。
+
+只需要第一个可播放 MP4 链接时，调用 `client.sessions.get_replay_url(session_id)`；`get_replay()` 可查看所有标签页的状态信息。录制或处理尚未完成时，链接为 `null` 属于正常情况：录制结束后关闭会话，稍后重新运行。`failed`、`disabled` 不返回视频链接；鉴权失败、会话不存在会以非零状态退出。`--tab-id` 选择返回列表中的标签页，ID 不存在时提示错误。
+
+返回的是视频地址，不是控制台页面。签名链接会过期，届时重新查询；不要将链接公开到日志或问题报告。示例不会无限轮询，也不会修改会话。
 
 ## 📋 示例说明
 
@@ -131,7 +145,6 @@ python3 wpt_demo.py --count 2 --path /dom/historical.html
 python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 ```
 
-
 ## 凭据检查与浏览器登录
 
 所有 demo 都会在调用 API 前检查 `LEXMOUNT_PROJECT_ID` 和 `LEXMOUNT_API_KEY`。读取的是**当前工作目录**的 `.env`，其中的值优先于已导出的环境变量；空值及模板占位值视为未配置。已有完整凭据时直接运行，不打开浏览器。
@@ -147,7 +160,7 @@ python3 cpu_load_demo.py --count 1 --pages 4 --duration-seconds 300
 
 ## 通过本地代理访问公司内网
 
-`local_proxy_demo.py` 使用 SDK **0.8.1**，先打开独立的本地网络隧道，再创建使用该隧道的 normal 云浏览器。请在已接入公司网络或 VPN 的机器上运行；目标域名解析和 TCP 连接由这台机器完成。API 环境和所选区域需要部署本地代理网关，项目需要启用 `custom_proxy`。
+`local_proxy_demo.py` 使用 SDK **0.9.0**，先打开独立的本地网络隧道，再创建使用该隧道的 normal 云浏览器。请在已接入公司网络或 VPN 的机器上运行；目标域名解析和 TCP 连接由这台机器完成。API 环境和所选区域需要部署本地代理网关，项目需要启用 `custom_proxy`。
 
 安装依赖并配置凭据后运行：
 
@@ -165,7 +178,7 @@ demo 输出页面标题、保存 `local_proxy_demo.png`，随后等待用户按�
 
 ## Browser Agent API
 
-本仓依赖固定为**Lexmount SDK 0.8.1**，执行 `python -m pip install -r requirements.txt` 即可安装，无需 SDK 源码目录。服务端仍需开启公共 Browser Agent API，并为项目配置访问权限。
+本仓依赖固定为**Lexmount SDK 0.9.0**，执行 `python -m pip install -r requirements.txt` 即可安装，无需 SDK 源码目录。服务端仍需开启公共 Browser Agent API，并为项目配置访问权限。
 
 新增用例沿用上面的凭据初始化流程：已有配置直接使用；本地 macOS/Windows 缺少凭据时，浏览器登录授权后自动获取并保存 Project ID 和 API Key。
 
@@ -186,10 +199,9 @@ python browser_agent_recovery.py
 
 `RunWaitTimeout` 只停止本地等待，不会取消或重建任务；用已保存 ID 继续 GET/wait。API Key 不应放进 URL、日志或浏览器端代码。`usage.credits=null` 表示计量尚未确认，不能当成零费用。SDK 与示例均默认使用 `https://api.lexmount.com`；仍可通过 `LEXMOUNT_BASE_URL` 显式选择 CN 或自定义环境。凭据检查与浏览器登录沿用本仓已有流程。
 
-
 ### Browser Agent 安装与回归验证
 
-在干净的项目目录中先激活独立 Python 虚拟环境，再执行 `bash scripts/test-browser-agent.sh`，从 PyPI 安装声明的 `0.8.1` 依赖并运行认证、恢复及语法检查，不依赖旁边的 SDK 源码。测试使用本地模拟，不会创建真实 Agent 或 Run。
+在干净的项目目录中先激活独立 Python 虚拟环境，再执行 `bash scripts/test-browser-agent.sh`，从 PyPI 安装声明的 `0.9.0` 依赖并运行认证、恢复及语法检查，不依赖旁边的 SDK 源码。测试使用本地模拟，不会创建真实 Agent 或 Run。
 
 恢复文件绑定原 Project ID 与 API origin，不保存 API Key。切换项目/服务、使用旧的无归属文件或丢失幂等键时，会在任何 Run 请求前拒绝继续；应核对原任务，不能通过删文件重跑来规避。POSIX 下 POST 前及回执重命名后均同步文件/目录。已有 Run ID 时只 GET/wait，不受创建幂等键七天窗口限制。
 
@@ -199,7 +211,7 @@ python browser_agent_recovery.py
 
 查询当前配额周期的 WebFetch 已用次数、基础额度及剩余次数，并查询近一年历史周期的 WebFetch 次数，不创建浏览器 session。打印响应元信息与数据；输出包含项目用量信息，请妥善保存。
 
-仓库固定 SDK 0.8.1，包含当前和历史 WebFetch 用量接口。直接从包仓库安装，无需 SDK 源码目录。
+仓库固定 SDK 0.9.0，包含当前和历史 WebFetch 用量接口。直接从包仓库安装，无需 SDK 源码目录。
 
 ```sh
 python -m pip install -r requirements.txt
