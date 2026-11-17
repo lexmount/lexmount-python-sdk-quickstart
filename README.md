@@ -1,6 +1,6 @@
 # lexmount-python-sdk-quickstart
 
-> Release dependency: install after SDK 0.9.0 is published to PyPI. Replay lookup requires the replay-enabled backend ([backend PR #654](https://github.com/lexmount/lexmount-nodejs-backend/pull/654)).
+> Release dependency: install after SDK 0.10.0 is published to PyPI. Replay lookup requires the replay-enabled backend ([backend PR #654](https://github.com/lexmount/lexmount-nodejs-backend/pull/654)).
 
 > 🇨🇳 [中文版](./README.zh.md)
 
@@ -8,7 +8,28 @@ Quick start examples for Lexmount Python SDK.
 
 ---
 
-## Query a session's Replay URL (SDK 0.9.0)
+## Temporary Execution Token (SDK 0.10.0)
+
+For trusted platform/Agent integrations, pass the short-lived Token explicitly. It is distinct from a personal debug Key or production project API key; it must be issued by the platform for the current user, project and execution. This example reads sessions and does not create resources.
+
+```python
+import os
+from lexmount import Lexmount
+
+# The trusted platform supplies a temporary Token and its bound project.
+with Lexmount(
+    execution_token=os.environ["LEXMOUNT_EXECUTION_TOKEN"],
+    project_id=os.environ["LEXMOUNT_PROJECT_ID"],
+    base_url=os.environ["LEXMOUNT_BASE_URL"],
+) as client:
+    sessions = client.sessions.list()
+```
+
+Use the matching `LEXMOUNT_BASE_URL` and project supplied by the platform. Never print the Token, put it in a URL or send it to a webpage. Explicit Token mode ignores an inherited `LEXMOUNT_API_KEY`; do not also pass an API-key argument. Missing/invalid Tokens fail before requests; expired, logged-out or revoked identity is rejected by the server without falling back to a Key. This mode requires the server's Execution Token routes to be enabled; installing the SDK does not enable them.
+
+The other CLI demos retain their existing API-key/PKCE setup. Their public package installation requires SDK 0.10.0 to be published first; for pre-release verification install the reviewed SDK 0.10.0 build artifact locally. This PR does not publish that package.
+
+## Query a session's Replay URL (SDK 0.10.0)
 
 ```bash
 python session_replay.py --session-id SESSION_ID
@@ -167,7 +188,7 @@ Run examples from this repository directory so they share the same `.env`.
 
 ## Access your company network with the local proxy
 
-`local_proxy_demo.py` uses SDK **0.9.0**, opens a separate local-network tunnel, then creates a normal cloud browser with that tunnel. Run it on the machine connected to your company network or VPN. Target DNS and TCP connections use this machine's network. The API environment and selected region must have the local proxy gateway deployed, and the project must have `custom_proxy` enabled.
+`local_proxy_demo.py` uses SDK **0.10.0**, opens a separate local-network tunnel, then creates a normal cloud browser with that tunnel. Run it on the machine connected to your company network or VPN. Target DNS and TCP connections use this machine's network. The API environment and selected region must have the local proxy gateway deployed, and the project must have `custom_proxy` enabled.
 
 After installing dependencies and setting credentials, run:
 
@@ -185,7 +206,7 @@ Use an internal hostname or LAN IP for the target. Chrome has [implicit proxy by
 
 ## Browser Agent API
 
-This repository pins **Lexmount SDK 0.9.0**. Run `python -m pip install -r requirements.txt` to install it; a sibling SDK checkout is not required. The server must still have its public Browser Agent API enabled and the project configured for access.
+This repository pins **Lexmount SDK 0.10.0**. Run `python -m pip install -r requirements.txt` to install it; a sibling SDK checkout is not required. The server must still have its public Browser Agent API enabled and the project configured for access.
 
 All new examples use the credential setup described above: existing credentials are reused; on local macOS/Windows terminals, missing credentials start browser sign-in and authorization, then save the returned Project ID and API key.
 
@@ -210,7 +231,7 @@ These examples use the existing credential setup flow described above.
 
 ### Browser Agent installation and regression checks
 
-Activate a disposable Python virtual environment, then run `bash scripts/test-browser-agent.sh` in a clean checkout. It installs the declared `0.9.0` package from PyPI and checks credential setup, recovery and Python syntax without a sibling SDK checkout. These checks use local mocks and do not create real Agents or Runs.
+Activate a disposable Python virtual environment, then run `bash scripts/test-browser-agent.sh` in a clean checkout. It installs the declared `0.10.0` package from PyPI and checks credential setup, recovery and Python syntax without a sibling SDK checkout. These checks use local mocks and do not create real Agents or Runs.
 
 Recovery files bind the original Project ID and API origin, with no API key saved. Reusing a file in another project/service, using an old unscoped file or losing its idempotency key is rejected before any Run request. Reconcile the original task instead of deleting the file and rerunning. On POSIX, file contents and directory entries are synced before POST and after the receipt rename. A known Run ID uses GET/wait even after the seven-day create-key window.
 
@@ -220,7 +241,7 @@ Credential setup matches the other demos: reuse valid Project ID/API Key from `.
 
 Query current-period WebFetch allowance and the past 365 days of WebFetch quota periods, without creating a browser session. Prints response metadata and data. Keep output private if it contains project usage information.
 
-This repository pins the SDK 0.9.0, including current and historical WebFetch usage. Install directly from the package registry; no SDK source checkout is required.
+This repository pins the SDK 0.10.0, including current and historical WebFetch usage. Install directly from the package registry; no SDK source checkout is required.
 
 ```sh
 python -m pip install -r requirements.txt
