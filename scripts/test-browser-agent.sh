@@ -12,7 +12,7 @@ import asyncio
 from importlib.metadata import version
 from lexmount import __version__, Lexmount, AsyncLexmount, RunWaitTimeout
 
-assert version("lexmount") == __version__ == "0.9.0"
+assert version("lexmount") == __version__ == "0.10.0"
 config = dict(api_key="package-check", project_id="package-check", base_url="https://api.example.invalid")
 with Lexmount(**config) as client:
     assert callable(client.sessions.get_replay)
