@@ -1,6 +1,6 @@
 # lexmount-python-sdk-quickstart
 
-> 发布依赖：请在 SDK 0.10.0 发布到 PyPI 后安装。回放查询需要部署支持该功能的后端（[backend PR #654](https://github.com/lexmount/lexmount-nodejs-backend/pull/654)）。
+> SDK [0.10.0 已发布到 PyPI](https://pypi.org/project/lexmount/0.10.0/)，运行 `python -m pip install -r requirements.txt` 即可安装。回放查询需要部署支持该功能的后端（[backend PR #654](https://github.com/lexmount/lexmount-nodejs-backend/pull/654)）。
 
 > 🇬🇧 [English](./README.md)
 
@@ -27,7 +27,7 @@ with Lexmount(
 
 使用平台提供的项目和对应的 `LEXMOUNT_BASE_URL`。不要打印Token、放进URL或交给网页。显式Token模式不会读取环境中的 `LEXMOUNT_API_KEY`，也不能同时传入API Key参数。Token缺失或格式错误会在请求前拒绝；到期、退出登录或撤权由服务端拒绝，不回退Key。服务端必须已开放Execution Token接口，安装SDK本身不会开启功能。
 
-其他命令行示例保留原有API Key／PKCE配置。从公共包仓库安装需等0.10.0正式发布；发布前验证可安装已核验的0.10.0构建产物。本PR不发布SDK。
+其他命令行示例保留原有API Key／PKCE配置。SDK 0.10.0 可直接从 PyPI 安装，无需本地构建产物或 SDK 源码。
 
 ## 按 Session ID 查询回放链接（SDK 0.10.0）
 

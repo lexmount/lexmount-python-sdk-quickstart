@@ -1,6 +1,6 @@
 # lexmount-python-sdk-quickstart
 
-> Release dependency: install after SDK 0.10.0 is published to PyPI. Replay lookup requires the replay-enabled backend ([backend PR #654](https://github.com/lexmount/lexmount-nodejs-backend/pull/654)).
+> SDK [0.10.0 is available on PyPI](https://pypi.org/project/lexmount/0.10.0/); install it with `python -m pip install -r requirements.txt`. Replay lookup requires the replay-enabled backend ([backend PR #654](https://github.com/lexmount/lexmount-nodejs-backend/pull/654)).
 
 > 🇨🇳 [中文版](./README.zh.md)
 
@@ -27,7 +27,7 @@ with Lexmount(
 
 Use the matching `LEXMOUNT_BASE_URL` and project supplied by the platform. Never print the Token, put it in a URL or send it to a webpage. Explicit Token mode ignores an inherited `LEXMOUNT_API_KEY`; do not also pass an API-key argument. Missing/invalid Tokens fail before requests; expired, logged-out or revoked identity is rejected by the server without falling back to a Key. This mode requires the server's Execution Token routes to be enabled; installing the SDK does not enable them.
 
-The other CLI demos retain their existing API-key/PKCE setup. Their public package installation requires SDK 0.10.0 to be published first; for pre-release verification install the reviewed SDK 0.10.0 build artifact locally. This PR does not publish that package.
+The other CLI demos retain their existing API-key/PKCE setup. SDK 0.10.0 can be installed directly from PyPI; no local build artifact or SDK checkout is needed.
 
 ## Query a session's Replay URL (SDK 0.10.0)
 
