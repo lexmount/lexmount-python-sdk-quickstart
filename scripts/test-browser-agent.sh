@@ -12,9 +12,10 @@ import asyncio
 from importlib.metadata import version
 from lexmount import __version__, Lexmount, AsyncLexmount, RunWaitTimeout
 
-assert version("lexmount") == __version__ == "0.10.0"
+assert version("lexmount") == __version__ == "0.11.0"
 config = dict(api_key="package-check", project_id="package-check", base_url="https://api.example.invalid")
 with Lexmount(**config) as client:
+    assert callable(client.browser_agent.v2.runs.complete_intervention)
     assert callable(client.sessions.get_replay)
     assert callable(client.sessions.get_replay_url)
     assert callable(client.browser_agent.agents.create)
@@ -22,10 +23,11 @@ with Lexmount(**config) as client:
 
 async def check_async():
     async with AsyncLexmount(**config) as client:
+        assert callable(client.browser_agent.v2.runs.complete_intervention)
         assert callable(client.browser_agent.agents.create)
         assert callable(client.browser_agent.runs.wait)
 
 asyncio.run(check_async())
 PYSDK
 python -m unittest test_quickstart_auth test_browser_agent_recovery test_session_replay
-python -m compileall -q browser_agent.py browser_agent_async.py browser_agent_advanced.py browser_agent_common.py browser_agent_recovery.py
+python -m compileall -q browser_agent_takeover.py browser_agent.py browser_agent_async.py browser_agent_advanced.py browser_agent_common.py browser_agent_recovery.py
